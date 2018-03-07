@@ -6,8 +6,8 @@ import ECO.param;
 public class CalculW {
 	
 	public static Double getDenom(MatT matrice, param parametre) {
-		Double denominateur = Math.exp(parametre.getC()*matrice.getAC1() + Math.exp(parametre.getC()*matrice.getAF1()) 
-			+ Math.exp(parametre.getC()*matrice.getAF2()) + Math.exp(parametre.getC()*matrice.getAC2()) + Math.exp(0.0)) ;
+		Double denominateur = Math.exp(parametre.getC()*matrice.getAC1()) + Math.exp(parametre.getC()*matrice.getAF1()) 
+			+ Math.exp(parametre.getC()*matrice.getAF2()) + Math.exp(parametre.getC()*matrice.getAC2()) + Math.exp(0.0) ;
 		return denominateur;
 	}
 	
