@@ -17,7 +17,8 @@ import javafx.stage.Stage;
 public class Main extends Application {
 	public static int iteration = 5000;
 	// Ne pas mettre la valeur de nb_simulation à 1 ou 0 ! nb_simulation>=2
-	public static int nb_simulation = 100;
+	public static int nb_simulation = 10;
+	public static int nb_tours = 2;
 	static Stage stageS1 = new Stage();
 	static Stage stageS2 = new Stage();
 	static Stage stagePoids = new Stage();
@@ -36,8 +37,6 @@ public class Main extends Application {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void main(String args[]) {
-		List<MatT> listeMoyenne = new LinkedList<MatT>();
-		List<LinkedList<MatT>> listeMatrice = new LinkedList<LinkedList<MatT>>();
 
 		Random rand = new Random();
 
@@ -107,61 +106,135 @@ public class Main extends Application {
 		// On veut faire j tours pour supprimer l'erreur
 		System.out.println("Wait for it ...");
 
-		for (int j = 0; j < nb_simulation; j++) {
-			// On remet la matrice à 0
-			LinkedList<MatT> finalMatrice = new LinkedList<MatT>();
+		List<MatT> matriceNtours = new LinkedList<MatT>();
+		MatT initialisation = new MatT(null, null, null, null, null, null, null, null, null, null, null, null, null,null);
 
-			// On ajoute les matrices initialisées
-			finalMatrice.add(matrice0);
-			finalMatrice.add(matrice1);
-
-			// Itération
-			for (int i = 2; i <= iteration; i++) {
-				MatT matrice_incrementation = MatT.incrementation(finalMatrice.get(i - 1), finalMatrice.get(i - 2),
-						parametre);
-				finalMatrice.add(matrice_incrementation);
-
-			}
-			System.out.println("Etape " + Integer.toString(j) + " sur " + Integer.toString(nb_simulation));
-			listeMatrice.add(finalMatrice);
-
+		for (int i = 0; i<iteration-1; i++) {
+			matriceNtours.add(initialisation);
 		}
+				
+		List<List<MatT>> listeMatriceMoyenne = new LinkedList<List<MatT>>();
 
-		for (int i = 1; i <= iteration - 1; i++) {
-			System.out
-					.println("Moyenne en cours, etape " + Integer.toString(i) + " sur " + Integer.toString(iteration));
-
+		for (int l = 0; l < nb_tours; l++) {
+			List<MatT> listeMoyenne = new LinkedList<MatT>();
+			List<LinkedList<MatT>> listeMatrice = new LinkedList<LinkedList<MatT>>();
 			MatT matriceMoyenne = new MatT(null, null, null, null, null, null, null, null, null, null, null, null, null,
 					null);
 
-			for (int j = 1; j < nb_simulation; j++) {
+			for (int j = 0; j < nb_simulation; j++) {
+				// On remet la matrice à 0
+				LinkedList<MatT> finalMatrice = new LinkedList<MatT>();
 
-				matriceMoyenne.setS1(
-						(listeMatrice.get(j - 1).get(i).getS1() * j + listeMatrice.get(j).get(i).getS1()) / (j + 1));
-				matriceMoyenne.setS2(
-						(listeMatrice.get(j - 1).get(i).getS2() * j + listeMatrice.get(j).get(i).getS2()) / (j + 1));
-				matriceMoyenne.setWC1(
-						(listeMatrice.get(j - 1).get(i).getWC1() * j + listeMatrice.get(j).get(i).getWC1()) / (j + 1));
-				matriceMoyenne.setWC2(
-						(listeMatrice.get(j - 1).get(i).getWC2() * j + listeMatrice.get(j).get(i).getWC2()) / (j + 1));
-				matriceMoyenne.setWF1(
-						(listeMatrice.get(j - 1).get(i).getWF1() * j + listeMatrice.get(j).get(i).getWF1()) / (j + 1));
-				matriceMoyenne.setWF2(
-						(listeMatrice.get(j - 1).get(i).getWF2() * j + listeMatrice.get(j).get(i).getWF2()) / (j + 1));
+				// On ajoute les matrices initialisées
+				finalMatrice.add(matrice0);
+				finalMatrice.add(matrice1);
+
+				// Itération
+				for (int i = 2; i <= iteration; i++) {
+					MatT matrice_incrementation = MatT.incrementation(finalMatrice.get(i - 1), finalMatrice.get(i - 2),
+							parametre);
+					finalMatrice.add(matrice_incrementation);
+
+				}
+				System.out.println("Etape " + Integer.toString(j) + " sur " + Integer.toString(nb_simulation));
+				listeMatrice.add(finalMatrice);
+
 			}
-			listeMoyenne.add(matriceMoyenne);
+
+			for (int i = 1; i <= iteration - 1; i++) {
+				System.out.println(
+						"Moyenne en cours, etape " + Integer.toString(i) + " sur " + Integer.toString(iteration));
+
+				// MatT matriceMoyenne = new MatT(null, null, null, null, null,
+				// null, null, null, null, null, null, null, null,
+				// null);
+
+				matriceMoyenne.setS1(0.0);
+				matriceMoyenne.setS2(0.0);
+				matriceMoyenne.setWC1(0.0);
+				matriceMoyenne.setWC2(0.0);
+				matriceMoyenne.setWF1(0.0);
+				matriceMoyenne.setWF2(0.0);
+
+				for (int j = 1; j < nb_simulation; j++) {
+
+					matriceMoyenne
+							.setS1((listeMatrice.get(j - 1).get(i).getS1() * j + listeMatrice.get(j).get(i).getS1())
+									/ (j + 1));
+					matriceMoyenne
+							.setS2((listeMatrice.get(j - 1).get(i).getS2() * j + listeMatrice.get(j).get(i).getS2())
+									/ (j + 1));
+					matriceMoyenne
+							.setWC1((listeMatrice.get(j - 1).get(i).getWC1() * j + listeMatrice.get(j).get(i).getWC1())
+									/ (j + 1));
+					matriceMoyenne
+							.setWC2((listeMatrice.get(j - 1).get(i).getWC2() * j + listeMatrice.get(j).get(i).getWC2())
+									/ (j + 1));
+					matriceMoyenne
+							.setWF1((listeMatrice.get(j - 1).get(i).getWF1() * j + listeMatrice.get(j).get(i).getWF1())
+									/ (j + 1));
+					matriceMoyenne
+							.setWF2((listeMatrice.get(j - 1).get(i).getWF2() * j + listeMatrice.get(j).get(i).getWF2())
+									/ (j + 1));
+				}
+
+				listeMoyenne.add(matriceMoyenne);
+			}
+
+			listeMatriceMoyenne.add(listeMoyenne);
+
 		}
 
-		for (int i = 0; i <= iteration - 2; i++) {
+		for (int j = 0; j < iteration - 1; j++) {
+
+			matriceNtours.get(j)
+					.setS1(listeMatriceMoyenne.get(0).get(j).getS1() + listeMatriceMoyenne.get(1).get(j).getS1()
+);	//						+ listeMatriceMoyenne.get(2).get(j).getS1() + listeMatriceMoyenne.get(3).get(j).getS1()
+	//						+ listeMatriceMoyenne.get(4).get(j).getS1() + listeMatriceMoyenne.get(5).get(j).getS1()
+	//						+ listeMatriceMoyenne.get(6).get(j).getS1() + listeMatriceMoyenne.get(7).get(j).getS1()
+	//						+ listeMatriceMoyenne.get(8).get(j).getS1() + listeMatriceMoyenne.get(9).get(j).getS1());
+			matriceNtours.get(j)
+					.setS2(listeMatriceMoyenne.get(0).get(j).getS2() + listeMatriceMoyenne.get(1).get(j).getS2()
+);	//						+ listeMatriceMoyenne.get(2).get(j).getS2() + listeMatriceMoyenne.get(3).get(j).getS2()
+	//						+ listeMatriceMoyenne.get(4).get(j).getS2() + listeMatriceMoyenne.get(5).get(j).getS2()
+	//						+ listeMatriceMoyenne.get(6).get(j).getS2() + listeMatriceMoyenne.get(7).get(j).getS2()
+	//						+ listeMatriceMoyenne.get(8).get(j).getS2() + listeMatriceMoyenne.get(9).get(j).getS2());
+			matriceNtours.get(j)
+					.setWC1(listeMatriceMoyenne.get(0).get(j).getWC1() + listeMatriceMoyenne.get(1).get(j).getWC1()
+);	//						+ listeMatriceMoyenne.get(2).get(j).getWC1() + listeMatriceMoyenne.get(3).get(j).getWC1()
+	//						+ listeMatriceMoyenne.get(4).get(j).getWC1() + listeMatriceMoyenne.get(5).get(j).getWC1()
+	//						+ listeMatriceMoyenne.get(6).get(j).getWC1() + listeMatriceMoyenne.get(7).get(j).getWC1()
+	//						+ listeMatriceMoyenne.get(8).get(j).getWC1() + listeMatriceMoyenne.get(9).get(j).getWC1());
+			matriceNtours.get(j)
+					.setWC2(listeMatriceMoyenne.get(0).get(j).getWC2() + listeMatriceMoyenne.get(1).get(j).getWC2()
+);	//						+ listeMatriceMoyenne.get(2).get(j).getWC2() + listeMatriceMoyenne.get(3).get(j).getWC2()
+	//						+ listeMatriceMoyenne.get(4).get(j).getWC2() + listeMatriceMoyenne.get(5).get(j).getWC2()
+	//						+ listeMatriceMoyenne.get(6).get(j).getWC2() + listeMatriceMoyenne.get(7).get(j).getWC2()
+	//						+ listeMatriceMoyenne.get(8).get(j).getWC2() + listeMatriceMoyenne.get(9).get(j).getWC2());
+			matriceNtours.get(j)
+					.setWF1(listeMatriceMoyenne.get(0).get(j).getWF1() + listeMatriceMoyenne.get(1).get(j).getWF1()
+);	//						+ listeMatriceMoyenne.get(2).get(j).getWF1() + listeMatriceMoyenne.get(3).get(j).getWF1()
+	//						+ listeMatriceMoyenne.get(4).get(j).getWF1() + listeMatriceMoyenne.get(5).get(j).getWF1()
+	//						+ listeMatriceMoyenne.get(6).get(j).getWF1() + listeMatriceMoyenne.get(7).get(j).getWF1()
+	//						+ listeMatriceMoyenne.get(8).get(j).getWF1() + listeMatriceMoyenne.get(9).get(j).getWF1());
+			matriceNtours.get(j)
+					.setWF1(listeMatriceMoyenne.get(0).get(j).getWF2() + listeMatriceMoyenne.get(1).get(j).getWF2()
+);	//						+ listeMatriceMoyenne.get(2).get(j).getWF2() + listeMatriceMoyenne.get(3).get(j).getWF2()
+	//						+ listeMatriceMoyenne.get(4).get(j).getWF2() + listeMatriceMoyenne.get(5).get(j).getWF2()
+	//						+ listeMatriceMoyenne.get(6).get(j).getWF2() + listeMatriceMoyenne.get(7).get(j).getWF2()
+	//						+ listeMatriceMoyenne.get(8).get(j).getWF2() + listeMatriceMoyenne.get(9).get(j).getWF2());
+		}
+
+		for (int i = 0; i <= iteration - 3; i++) {
 			System.out.println(
 					"Génération de l'affichage " + Integer.toString(i + 2) + " sur " + Integer.toString(iteration));
-			seriesS1.getData().add(new XYChart.Data(i, listeMoyenne.get(i).getS1()));
-			seriesS2.getData().add(new XYChart.Data(i, listeMoyenne.get(i).getS2()));
-			seriesC1.getData().add(new XYChart.Data(i, listeMoyenne.get(i).getWC1()));
-			seriesF1.getData().add(new XYChart.Data(i, listeMoyenne.get(i).getWF1() + listeMoyenne.get(i).getWC1()));
-			seriesC2.getData().add(new XYChart.Data(i, 1 - listeMoyenne.get(i).getWC2()));
+			seriesS1.getData().add(new XYChart.Data(i, matriceNtours.get(i).getS1()));
+			seriesS2.getData().add(new XYChart.Data(i, matriceNtours.get(i).getS2()));
+			seriesC1.getData().add(new XYChart.Data(i, matriceNtours.get(i).getWC1()));
+			seriesF1.getData().add(new XYChart.Data(i, matriceNtours.get(i).getWF1() + matriceNtours.get(i).getWC1()));
+			seriesC2.getData().add(new XYChart.Data(i, 1 - matriceNtours.get(i).getWC2()));
 			seriesF2.getData()
-					.add(new XYChart.Data(i, 1 - listeMoyenne.get(i).getWF2() - listeMoyenne.get(i).getWC2()));
+					.add(new XYChart.Data(i, 1 - matriceNtours.get(i).getWF2() - matriceNtours.get(i).getWC2()));
 		}
 
 		launch(args);
