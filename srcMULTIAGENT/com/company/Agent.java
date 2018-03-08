@@ -21,27 +21,27 @@ public class Agent {
 		Random r = new Random();
 		int valeur = r.nextGaussian()*100;
 		if (valeur < 20) {
-			this.type = "C1";
+			this.type = "technical";
 			this.marche = 1;
 		}
 		else 
 			if (valeur < 40) {
-				this.type = "F1";
+				this.type = "fundamental";
 				this.marche = 1;
 			}
 			else 
 				if (valeur < 60) {
-					this.type = "C2";
+					this.type = "technical";
 					this.marche = 2;
 				}
 				else 
 					if (valeur < 80) {
-						this.type = "F2";
+						this.type = "fundamental";
 						this.marche = 2;
 					}
 					else 
 						if (valeur < 101) {
-							this.type = "NT";
+							this.type = "non trading";
 							this.marche = 0;
 						}
 		this.order = 0.0;
