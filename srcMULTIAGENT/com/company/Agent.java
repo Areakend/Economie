@@ -19,33 +19,30 @@ public class Agent {
 
 	public Agent() {
 		Random r = new Random();
-		int valeur = r.nextGaussian()*100;
-		if (valeur < 20) {
+		double valeur = r.nextGaussian()*100;
+		if (valeur < 25) {
 			this.type = "technical";
 			this.marche = 1;
 		}
 		else 
-			if (valeur < 40) {
+			if (valeur < 50) {
 				this.type = "fundamental";
 				this.marche = 1;
 			}
 			else 
-				if (valeur < 60) {
+				if (valeur < 75) {
 					this.type = "technical";
 					this.marche = 2;
-				}
-				else 
-					if (valeur < 80) {
-						this.type = "fundamental";
+				}else
+				{	this.type = "fundamental";
 						this.marche = 2;
-					}
-					else 
-						if (valeur < 101) {
-							this.type = "non trading";
-							this.marche = 0;
-						}
-		this.order = 0.0;
-		this.fitness = 0.0;
+				}
+		this.order = new ArrayList<Double>();
+        this.order.add(0.0);
+        this.order.add(0.0);
+		this.fitness = new ArrayList<Double>();
+		this.fitness.add(0.0);
+        this.fitness.add(0.0);
 		this.rationality_c = 300.0;
 		this.acf = 0.05;
 		this.memory_b = 0.975;
@@ -148,18 +145,15 @@ public class Agent {
 				+ Math.exp(marche.getPrice_sI(indice - 1)) * Math.abs(getOrderI(indice - 2))
 				+ this.memory_b * getFitnessI(indice - 1);
 	}
-
-	public void update(Environment marche, int indice) {
-		checkFitness(marche, indice);
-		if (this.type == "technical") {
-			addOrder(this.acf * (marche.getPrice_sI(indice) - marche.getPrice_sI(indice - 1)) + 1);
+	public void update(Environment marche, int indice){
+		if(this.type == "technical"){
+			this.addOrder(this.acf * (marche.getPrice_sI(indice) - marche.getPrice_sI(indice - 1)) + 1);
 
 		} else if (this.type == "fundamental") {
-			addOrder(this.acf * (marche.getF() - marche.getPrice_sI(indice)) + 1);
+			this.addOrder(this.acf * (marche.getF() - marche.getPrice_sI(indice)) + 1);
 		} else {
-			addOrder(0.0);
+			this.addOrder(0.0);
 		}
-
 	}
 
 }

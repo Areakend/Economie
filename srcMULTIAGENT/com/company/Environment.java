@@ -13,7 +13,9 @@ public class Environment {
 	private double F;
 
 	public Environment() {
-		this.price_s = 0.0;
+		this.price_s = new ArrayList<Double>();
+		this.price_s.add(0.0);
+        this.price_s.add(0.0);
 		this.am = 1;
 		this.tax = 0.0;
 		this.F = 0;
@@ -72,12 +74,12 @@ public class Environment {
 
 	public void update(Agent[] agent, int numero_marche, int nb_agent, int indice) {
 		Double somme = 0.0;
-		for (int i = 0; i < nb_agent; i++) {
+		for (int i = 0; i < nb_agent-1; i++) {
 			if (agent[i].getMarche() == numero_marche) {
-				somme = somme + agent[i].getOrderI(2) * this.am;
+				somme = somme + agent[i].getOrderI(indice-1) * this.am;
 			}
 		}
-		addPrice_s(somme + this.price_s.get(indice - 1));
+		this.addPrice_s(somme + this.price_s.get(indice - 1));
 	}
 
 }
