@@ -37,6 +37,7 @@ public class Main extends Application {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void main(String args[]) {
 		List<MatT> listeMoyenne = new LinkedList<MatT>();
+		List<Double> stylizedFacts = new LinkedList<Double>();
 		List<LinkedList<MatT>> listeMatrice = new LinkedList<LinkedList<MatT>>();
 
 		Random rand = new Random();
@@ -156,6 +157,7 @@ public class Main extends Application {
 			System.out.println(
 					"Génération de l'affichage " + Integer.toString(i + 2) + " sur " + Integer.toString(iteration));
 			seriesS1.getData().add(new XYChart.Data(i, listeMoyenne.get(i).getS1()));
+			stylizedFacts.add(listeMoyenne.get(i).getS1());
 			seriesS2.getData().add(new XYChart.Data(i, listeMoyenne.get(i).getS2()));
 			seriesC1.getData().add(new XYChart.Data(i, listeMoyenne.get(i).getWC1()));
 			seriesF1.getData().add(new XYChart.Data(i, listeMoyenne.get(i).getWF1() + listeMoyenne.get(i).getWC1()));
@@ -165,6 +167,9 @@ public class Main extends Application {
 		}
 
 		launch(args);
+		System.out.println(StylizedFacts.minimum(stylizedFacts));
+		System.out.println(StylizedFacts.maximum(stylizedFacts));
+		System.out.println(StylizedFacts.kurtosis(stylizedFacts));
 
 	}
 
@@ -209,13 +214,14 @@ public class Main extends Application {
 		lineChartS2.setCreateSymbols(false);
 		areaChartPoids.getData().addAll(seriesC1, seriesC2, seriesF1, seriesF2);
 		areaChartPoids.setCreateSymbols(false);
-
+		
 		stageS1.setScene(sceneS1);
 		stageS2.setScene(sceneS2);
 		stagePoids.setScene(scenePoids);
 		stageS1.show();
 		stageS2.show();
 		stagePoids.show();
+		
 	}
 
 }
