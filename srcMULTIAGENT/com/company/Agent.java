@@ -19,44 +19,17 @@ public class Agent {
 	private double acf;
 	private double memory_b;
 
-	public Agent() {
+	public Agent(int nbMarche) {
 		Random r = new Random();
-		double valeur = r.nextGaussian()*100;
-		if (valeur < 25) {
+		double valeur = r.nextGaussian() * 100;
+		if (valeur < 50) {
 			this.type = "technical";
-			this.marche = 1;
+		} else if (valeur < 101) {
+			this.type = "fundamental";
 		}
-		else 
-			if (valeur < 50) {
-				this.type = "fundamental";
-				this.marche = 1;
-			}
-			else 
-				if (valeur < 75) {
-					this.type = "technical";
-					this.marche = 2;
-				}else
-				{	this.type = "fundamental";
-						this.marche = 2;
-				}
-		this.order = new ArrayList<Double>();
-        this.order.add(0.0);
-        this.order.add(0.0);
-		this.fitness = new ArrayList<Double>();
-		this.fitness.add(0.0);
-        this.fitness.add(0.0);
-		this.rationality_c = 300.0;
-		this.acf = 0.05;
-		this.memory_b = 0.975;
-	}
-
-	public Agent(int nb_marche){
-		Random r = new Random();
-		double valeur = r.nextGaussian();
-		if
-
-
-
+		int choix = (int)( Math.random()*nbMarche);
+		this.marche = choix + 1;
+		
 		this.order = new ArrayList<Double>();
 		this.order.add(0.0);
 		this.order.add(0.0);
@@ -66,12 +39,10 @@ public class Agent {
 		this.rationality_c = 300.0;
 		this.acf = 0.05;
 		this.memory_b = 0.975;
-
-
-
 	}
 
-	public Agent(String type, int marche, ArrayList<Double> order, ArrayList<Double> fitness, double rationality_c,	double acf, double memory_b) {
+	public Agent(String type, int marche, ArrayList<Double> order, ArrayList<Double> fitness, double rationality_c,
+			double acf, double memory_b) {
 		this.type = type;
 		this.marche = marche;
 		this.order = order;
@@ -168,25 +139,24 @@ public class Agent {
 				+ this.memory_b * getFitnessI(indice - 1);
 	}
 
-
-	public void update(Environment marche, int indice,String model){
-		switch (model){
-			case "model1":
-				updateModel1(marche, indice);
-				break;
-			default:
-				System.out.println("Model non defini");
+	public void update(Environment marche, int indice, String model) {
+		switch (model) {
+		case "model1":
+			updateModel1(marche, indice);
+			break;
+		default:
+			System.out.println("Model non defini");
 		}
 	}
 
-	public void updateModel1(Environment marche, int indice){
+	public void updateModel1(Environment marche, int indice) {
 		Random r = new Random();
 
-		if(this.type == "technical"){
-			this.addOrder(this.acf * (marche.getPrice_sI(indice) - marche.getPrice_sI(indice - 1)) +  r.nextGaussian());
+		if (this.type == "technical") {
+			this.addOrder(this.acf * (marche.getPrice_sI(indice) - marche.getPrice_sI(indice - 1)) + r.nextGaussian());
 
 		} else if (this.type == "fundamental") {
-			this.addOrder(this.acf * (marche.getF() - marche.getPrice_sI(indice))+  r.nextGaussian() );
+			this.addOrder(this.acf * (marche.getF() - marche.getPrice_sI(indice)) + r.nextGaussian());
 		} else {
 			this.addOrder(0.0);
 		}

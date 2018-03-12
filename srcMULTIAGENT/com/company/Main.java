@@ -41,7 +41,7 @@ public class Main extends Application{
 		// Instanciation des agents
 		Agent[] agent = new Agent[nb_agent];
 		for (i = 0; i < nb_agent; i++) {
-			agent[i] = new Agent();
+			agent[i] = new Agent(nb_marche);
 		}
 
 		// Iteration
