@@ -17,43 +17,45 @@ public class Main extends Application{
 	Stage[] page = new Stage[nb_marche];
 	static XYChart.Series[] serie = new XYChart.Series[nb_marche];
 
-
-
-
 	public static void main(String[] args) {
 
-		//Choix des caractéristiques du modlee
+		//Choix des caractéristiques du modele
 		final String model  = "model1";
 
 		int i;
 		int j;
 
-		//Instanciation pour
 
+		// Instanciation des agents
+		Agent[] agent = new Agent[nb_agent];
+		for (i = 0; i < nb_agent; i++) {
+			agent[i] = new Agent(nb_marche);
+			System.out.println("agent " +i+" de type : " + agent[i].getType() + " sur le marche " +agent[i].getMarche());
+		}
 
 
 		// Instanciation des marches
 		Environment[] marche = new Environment[nb_marche];
 		for (i = 0; i < nb_marche; i++) {
 			marche[i] = new Environment();
+			marche[i].getFirstweight(agent, nb_agent);
 		}
 
-		// Instanciation des agents
-		Agent[] agent = new Agent[nb_agent];
-		for (i = 0; i < nb_agent; i++) {
-			agent[i] = new Agent(nb_marche);
-		}
+
 
 		// Iteration
 		for (i = 2; i < nb_cycle; i++) {
 			for (j = 0; j < nb_marche; j++) {
 				marche[j].update(agent, j, nb_agent, i);
-				System.out.println(marche[j].getPrice_sI(i));
 			}
 			for (j = 0; j < nb_agent; j++) {
 				agent[j].update(marche[agent[j].getMarche()-1], i, model);
 			}
 		}
+		System.out.println("nb de technical sur marche 1 : " +marche[0].getNb_agent_cI(10));
+		System.out.println("nb de fundamental sur marche 1 : " +marche[0].getNb_agent_fI(10));
+		System.out.println("nb de technical sur marche 2 : " +marche[1].getNb_agent_cI(10));
+		System.out.println("nb de fundamental sur marche 1 : "+marche[1].getNb_agent_fI(10));
 		System.out.println("Finish");
 
 		for(i=0; i<nb_marche; i++){

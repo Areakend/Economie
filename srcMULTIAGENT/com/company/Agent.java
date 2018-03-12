@@ -151,7 +151,6 @@ public class Agent {
 
 	public void updateModel1(Environment marche, int indice) {
 		Random r = new Random();
-
 		if (this.type == "technical") {
 			this.addOrder(this.acf * (marche.getPrice_sI(indice) - marche.getPrice_sI(indice - 1)) + r.nextGaussian());
 
