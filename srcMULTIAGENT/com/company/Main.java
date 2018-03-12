@@ -11,10 +11,10 @@ import java.util.ArrayList;
 
 
 public class Main extends Application{
-	public static final int nb_marche = 4;
+	public static final int nb_marche = 2;
 	public static final int nb_agent = 10;
 	public static final int nb_cycle = 200;
-	Stage[] stage1 = new Stage[nb_marche];
+	Stage[] page = new Stage[nb_marche];
 	static XYChart.Series[] serie = new XYChart.Series[nb_marche];
 
 
@@ -41,7 +41,7 @@ public class Main extends Application{
 		// Instanciation des agents
 		Agent[] agent = new Agent[nb_agent];
 		for (i = 0; i < nb_agent; i++) {
-			agent[i] = new Agent(nb_marche);
+			agent[i] = new Agent();
 		}
 
 		// Iteration
@@ -92,35 +92,35 @@ public class Main extends Application{
 
 	public void start(Stage stage) {
 		int j;
-		NumberAxis xAxis = new NumberAxis();
-		NumberAxis yAxis = new NumberAxis();
+		NumberAxis[] xAxis = new NumberAxis[nb_marche];
+		NumberAxis[] yAxis = new NumberAxis[nb_marche];
 
-		final LineChart<Number, Number> lineChart = new LineChart<Number, Number>(xAxis, yAxis);
-
+		ArrayList<LineChart<Number, Number>> lineChart = new ArrayList<LineChart<Number, Number>>();
+		Scene[] scene = new Scene[nb_marche];
 
 		for(j=0; j<nb_marche; j++){
-			stage1[j] = new Stage();
+			page[j] = new Stage();
 		}
 
-
-		lineChart.setTitle("Prix des marche");
 		for(j=0; j<nb_marche; j++){
-			serie[j].setName("price market " +j);
-
+			xAxis[j] = new NumberAxis();
+			yAxis[j] = new NumberAxis();
+			lineChart.add(new LineChart<Number, Number>(xAxis[j], yAxis[j]));
+			lineChart.get(j).setTitle("Prix du marche "+(j+1));
+			serie[j].setName("price market " +(j+1));
+			scene[j] = new Scene(lineChart.get(j), 800, 600);
+			lineChart.get(j).getData().add(serie[j]);
+			lineChart.get(j).setCreateSymbols(false);
+			page[j].setScene(scene[j]);
+			page[j].show();
 		}
-		for(j=0; j<nb_marche;j++){
 
-		}
-		Scene scene = new Scene(lineChart, 800, 600);
-		//Scene[] scene = new Scene[nb_marche];
-
-		for(j=0; j<nb_marche; j++ ){
-			lineChart.getData().add(serie[j]);
-		}
-		lineChart.setCreateSymbols(false);
+		/*Scene scene = new Scene(lineChart, 800, 600);
 		stage1[0].setScene(scene);
 		stage1[0].show();
+		*/
 	}
+
 
 
 }
