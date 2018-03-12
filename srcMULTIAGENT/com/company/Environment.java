@@ -1,11 +1,13 @@
 package com.company;
 
+import javafx.scene.chart.XYChart;
+
 import java.util.ArrayList;
 
 /**
  * Created by alexa on 23/02/2018.
  */
-public class Environment {
+public class Environment{
 	private ArrayList<Double> price_s;
 
 	private double am;
@@ -75,11 +77,35 @@ public class Environment {
 	public void update(Agent[] agent, int numero_marche, int nb_agent, int indice) {
 		Double somme = 0.0;
 		for (int i = 0; i < nb_agent-1; i++) {
-			if (agent[i].getMarche() == numero_marche) {
+			if (agent[i].getMarche()-1 == numero_marche) {
 				somme = somme + agent[i].getOrderI(indice-1) * this.am;
 			}
 		}
 		this.addPrice_s(somme + this.price_s.get(indice - 1));
 	}
 
+	public XYChart.Series createData(){
+		XYChart.Series serie = new XYChart.Series();
+		return serie;
+	}
+	/*
+	public void start(Stage s) {
+		Stage stage = new Stage();
+		NumberAxis xAxis = new NumberAxis();
+		NumberAxis yAxis = new NumberAxis();
+		LineChart<Number, Number> lineChart = new LineChart<Number, Number>(xAxis, yAxis);
+		lineChart.setTitle("coucou");
+
+		XYChart.Series serie = new XYChart.Series();
+		for (int i = 0; i < 2; i++) {
+			serie.getData().add(new XYChart.Data(i, this.getPrice_sI(i)));
+		}
+		serie.setName("coucou");
+		Scene sceneS1 = new Scene(lineChart, 800, 600);
+		lineChart.getData().add(serie);
+		lineChart.setCreateSymbols(false);
+		stage.setScene(sceneS1);
+		stage.show();
+	}
+	*/
 }

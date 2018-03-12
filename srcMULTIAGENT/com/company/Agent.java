@@ -1,5 +1,7 @@
 package com.company;
 
+import org.jfree.data.xy.XYDataset;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -145,12 +147,26 @@ public class Agent {
 				+ Math.exp(marche.getPrice_sI(indice - 1)) * Math.abs(getOrderI(indice - 2))
 				+ this.memory_b * getFitnessI(indice - 1);
 	}
-	public void update(Environment marche, int indice){
+
+
+	public void update(Environment marche, int indice,String model){
+		switch (model){
+			case "model1":
+				updateModel1(marche, indice);
+				break;
+			default:
+				System.out.println("Model non defini");
+		}
+	}
+
+	public void updateModel1(Environment marche, int indice){
+		Random r = new Random();
+
 		if(this.type == "technical"){
-			this.addOrder(this.acf * (marche.getPrice_sI(indice) - marche.getPrice_sI(indice - 1)) + 1);
+			this.addOrder(this.acf * (marche.getPrice_sI(indice) - marche.getPrice_sI(indice - 1)) +  r.nextGaussian());
 
 		} else if (this.type == "fundamental") {
-			this.addOrder(this.acf * (marche.getF() - marche.getPrice_sI(indice)) + 1);
+			this.addOrder(this.acf * (marche.getF() - marche.getPrice_sI(indice)) +  r.nextGaussian());
 		} else {
 			this.addOrder(0.0);
 		}
