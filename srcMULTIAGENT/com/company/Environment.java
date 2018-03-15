@@ -24,9 +24,7 @@ public class Environment{
 		this.tax = 0.0;
 		this.F = 0;
 		this.nb_agent_c = new ArrayList<Integer>();
-		this.nb_agent_c.add(0);
 		this.nb_agent_f = new ArrayList<Integer>();
-		this.nb_agent_f.add(0);
 	}
 
 	public Environment(ArrayList<Double> price_s, double am, double tax, double f) {
@@ -122,17 +120,21 @@ public class Environment{
 	public void addNb_agent_c(int valeur) {
 		this.nb_agent_c.add(valeur);
 	}
-	public void getFirstweight(Agent[] agent, int nb_agent){
+	public void getFirstweight(Agent[] agent, int nb_agent, int marche){
 		int nb_agentf = 0;
 		int nb_agentc = 0;
 		for(int i=0; i< nb_agent; i++){
-				if(agent[i].getType()=="technical"){
-					nb_agentf = nb_agentf +1;
-				}else{
-					nb_agentc = nb_agentc +1;
-				}
+			if(agent[i].getMarche()==marche+1){
+					if(agent[i].getType()=="fundamental"){
+						nb_agentf = nb_agentf +1;
+					}else{
+						nb_agentc = nb_agentc +1;
+					}
+			}
 		}
 		this.addNb_agent_c(nb_agentc);
+		this.addNb_agent_c(nb_agentc);
+		this.addNb_agent_f(nb_agentf);
 		this.addNb_agent_f(nb_agentf);
 	}
 
@@ -144,7 +146,7 @@ public class Environment{
 		for (int i = 0; i < nb_agent; i++) {
 			if (agent[i].getMarche()-1 == numero_marche) {
 				somme = somme + agent[i].getOrderI(indice-1) * this.am;
-				if(agent[i].getType()=="technical"){
+				if(agent[i].getType()=="fundamental"){
 					nb_agentf = nb_agentf +1;
 				}else{
 					nb_agentc = nb_agentc +1;
@@ -156,28 +158,6 @@ public class Environment{
 		this.addNb_agent_f(nb_agentf);
 	}
 
-	public XYChart.Series createData(){
-		XYChart.Series serie = new XYChart.Series();
-		return serie;
-	}
-	/*
-	public void start(Stage s) {
-		Stage stage = new Stage();
-		NumberAxis xAxis = new NumberAxis();
-		NumberAxis yAxis = new NumberAxis();
-		LineChart<Number, Number> lineChart = new LineChart<Number, Number>(xAxis, yAxis);
-		lineChart.setTitle("coucou");
 
-		XYChart.Series serie = new XYChart.Series();
-		for (int i = 0; i < 2; i++) {
-			serie.getData().add(new XYChart.Data(i, this.getPrice_sI(i)));
-		}
-		serie.setName("coucou");
-		Scene sceneS1 = new Scene(lineChart, 800, 600);
-		lineChart.getData().add(serie);
-		lineChart.setCreateSymbols(false);
-		stage.setScene(sceneS1);
-		stage.show();
-	}
-	*/
+
 }

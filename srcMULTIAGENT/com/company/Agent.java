@@ -19,9 +19,24 @@ public class Agent {
 	private double acf;
 	private double memory_b;
 
+	public Agent(int nbMarche, String test){
+		this.type = "fundamental";
+		int choix = (int)( Math.random()*nbMarche);
+		this.marche = choix + 1;
+		this.order = new ArrayList<Double>();
+		this.order.add(0.0);
+		this.order.add(0.0);
+		this.fitness = new ArrayList<Double>();
+		this.fitness.add(0.0);
+		this.fitness.add(0.0);
+		this.rationality_c = 300.0;
+		this.acf = 0.05;
+		this.memory_b = 0.975;
+
+	}
+
 	public Agent(int nbMarche) {
-		Random r = new Random();
-		double valeur = r.nextGaussian() * 100;
+		double valeur = Math.random() * 100;
 		if (valeur < 50) {
 			this.type = "technical";
 		} else if (valeur < 101) {
@@ -29,7 +44,7 @@ public class Agent {
 		}
 		int choix = (int)( Math.random()*nbMarche);
 		this.marche = choix + 1;
-		
+
 		this.order = new ArrayList<Double>();
 		this.order.add(0.0);
 		this.order.add(0.0);
