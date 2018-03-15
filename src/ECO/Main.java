@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 	public static int iteration = 5000;
 	// Ne pas mettre la valeur de nb_simulation à 1 ou 0 ! nb_simulation>=2
-	public static int nb_simulation = 100;
+	public static int nb_simulation = 10;
 	static Stage stageS1 = new Stage();
 	static Stage stageS2 = new Stage();
 	static Stage stagePoids = new Stage();
@@ -165,11 +165,11 @@ public class Main extends Application {
 			seriesF2.getData()
 					.add(new XYChart.Data(i, 1 - listeMoyenne.get(i).getWF2() - listeMoyenne.get(i).getWC2()));
 		}
-
-		launch(args);
 		System.out.println(StylizedFacts.minimum(stylizedFacts));
 		System.out.println(StylizedFacts.maximum(stylizedFacts));
 		System.out.println(StylizedFacts.kurtosis(stylizedFacts));
+		System.out.println(StylizedFacts.autocorrelation(stylizedFacts,100));
+		launch(args);
 
 	}
 
