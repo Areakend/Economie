@@ -13,7 +13,8 @@ public class Agent {
 	private int marche;
 
 	private ArrayList<Double> order;
-	private ArrayList<Double> fitness;
+	private ArrayList<ArrayList<Double>> fitness;
+
 
 	private double rationality_c;
 	private double acf;
@@ -26,9 +27,12 @@ public class Agent {
 		this.order = new ArrayList<Double>();
 		this.order.add(0.0);
 		this.order.add(0.0);
-		this.fitness = new ArrayList<Double>();
-		this.fitness.add(0.0);
-		this.fitness.add(0.0);
+		this.fitness = new ArrayList<ArrayList<Double>>();
+		ArrayList<Double> fit = new ArrayList<Double>();
+		for (int i=0; i<2*nbMarche; i++){
+			fit.add(0.0);
+		}
+		this.fitness.add(fit);
 		this.rationality_c = 300.0;
 		this.acf = 0.05;
 		this.memory_b = 0.975;
@@ -48,20 +52,25 @@ public class Agent {
 		this.order = new ArrayList<Double>();
 		this.order.add(0.0);
 		this.order.add(0.0);
-		this.fitness = new ArrayList<Double>();
-		this.fitness.add(0.0);
-		this.fitness.add(0.0);
+		this.fitness = new ArrayList<ArrayList<Double>>();
+		ArrayList<Double> fit = new ArrayList<Double>();
+		for (int i=0; i<2*nbMarche; i++){
+			fit.add(0.0);
+		}
+		this.fitness.add(fit);
+		this.fitness.add(fit);
 		this.rationality_c = 300.0;
 		this.acf = 0.05;
 		this.memory_b = 0.975;
 	}
 
-	public Agent(String type, int marche, ArrayList<Double> order, ArrayList<Double> fitness, double rationality_c,
+	public Agent(String type, int marche, ArrayList<Double> order, ArrayList<Double> fit, double rationality_c,
 			double acf, double memory_b) {
 		this.type = type;
 		this.marche = marche;
 		this.order = order;
-		this.fitness = fitness;
+		this.fitness = new ArrayList<ArrayList<Double>>();
+		this.fitness.add(fit);
 		this.rationality_c = rationality_c;
 		this.acf = acf;
 		this.memory_b = memory_b;
@@ -103,23 +112,26 @@ public class Agent {
 		this.order.add(valeur);
 	}
 
-	public ArrayList<Double> getFitness() {
+	public ArrayList<ArrayList<Double>> getFitness() {
 		return fitness;
 	}
 
-	public Double getFitnessI(int i) {
-		return fitness.get(i);
+	public ArrayList<Double> getFitnessT(int indice) {
+		return fitness.get(indice);
+	}
+	public Double getFitessTI(int indice, int i){
+		return fitness.get(indice).get(i);
 	}
 
-	public void setFitness(ArrayList<Double> fitness) {
+	public void setFitness(ArrayList<ArrayList<Double>> fitness) {
 		this.fitness = fitness;
 	}
 
-	public void setFitness(int indice, Double valeur) {
+	public void setFitness(int indice, ArrayList<Double> valeur) {
 		this.fitness.set(indice, valeur);
 	}
 
-	public void addFitness(Double valeur) {
+	public void addFitness(ArrayList<Double> valeur) {
 		this.fitness.add(valeur);
 	}
 
@@ -147,17 +159,61 @@ public class Agent {
 		this.memory_b = memory_b;
 	}
 
-	public void checkFitness(Environment marche, int indice) {
-		Double A = (Math.exp(marche.getPrice_sI(indice)) - Math.exp(marche.getPrice_sI(indice - 1)))
-				* getOrderI(indice - 2) - marche.getTax() * Math.exp(marche.getPrice_sI(indice))
-				+ Math.exp(marche.getPrice_sI(indice - 1)) * Math.abs(getOrderI(indice - 2))
-				+ this.memory_b * getFitnessI(indice - 1);
+	public void checkFitness(Environment[] marche, int nb_marche, int indice){
+		ArrayList<Double> fit = new ArrayList<Double>();
+		for(int i=0; i<nb_marche; i++){
+			fit.add((Math.exp(marche[i].getPrice_sI(indice))-Math.exp(marche[i].getPrice_sI(indice-1)))*this.getOrderI(indice-2)
+					- marche[i].getTax()*Math.exp(marche[i].getPrice_sI(indice))
+					+Math.exp(marche[i].getPrice_sI(indice-1))*Math.abs(this.getOrderI(indice-2))
+					+this.memory_b*this.getFitessTI(indice-1, i));
+		}
+		for(int i=0; i<nb_marche; i++){
+			fit.add((Math.exp(marche[i].getPrice_sI(indice))-Math.exp(marche[i].getPrice_sI(indice-1)))*this.getOrderI(indice-2)
+					- marche[i].getTax()*Math.exp(marche[i].getPrice_sI(indice))
+					+Math.exp(marche[i].getPrice_sI(indice-1))*Math.abs(this.getOrderI(indice-2))
+					+this.memory_b*this.getFitessTI(indice-1, i+nb_marche));
+		}
+		this.fitness.add(fit);
 	}
 
-	public void update(Environment marche, int indice, String model) {
+	public void checkWeight(int nb_marche, int indice){
+		Double somme = Math.exp(0);
+		int i;
+		for(i=0; i<2*nb_marche; i++){
+			somme = somme + Math.exp(this.rationality_c * this.getFitessTI(indice, i));
+		}
+		Double r = Math.random();
+		i=0;
+		Double test = Math.exp(this.rationality_c*this.getFitessTI(indice,i)) /somme;
+		while(test<r&&i<2*nb_marche-1){
+			i = i+1;
+			test = test+Math.exp(this.rationality_c*this.getFitessTI(indice,i)) /somme;
+		}
+		if(i<nb_marche){
+			this.setType("technical");
+		}else{
+			this.setType("fundamental");
+		}
+
+		this.setMarche((int)(i/2)+1);
+	}
+
+	public void update(Environment[] marche, int nb_marche,  int indice, String model) {
 		switch (model) {
 		case "model1":
-			updateModel1(marche, indice);
+			updateModel1(marche[this.getMarche()-1], indice);
+			break;
+		case "model2":
+			//changement d'etait avec les poids
+			checkFitness(marche, nb_marche, indice);
+			checkWeight(nb_marche, indice);
+			updateModel1(marche[this.getMarche()-1], indice);
+			break;
+		case "model3":
+			//changement des b
+			checkFitness(marche, nb_marche, indice);
+			//checkB(nb_marche, indice);
+			updateModel1(marche[this.getMarche()-1], indice);
 			break;
 		default:
 			System.out.println("Model non defini");
@@ -167,13 +223,15 @@ public class Agent {
 	public void updateModel1(Environment marche, int indice) {
 		Random r = new Random();
 		if (this.type == "technical") {
-			this.addOrder(this.acf * (marche.getPrice_sI(indice) - marche.getPrice_sI(indice - 1)) + r.nextGaussian());
+			this.addOrder(this.acf * (marche.getPrice_sI(indice) - marche.getPrice_sI(indice - 1)) + r.nextGaussian()*marche.getSigma_c());
 
 		} else if (this.type == "fundamental") {
-			this.addOrder(this.acf * (marche.getF() - marche.getPrice_sI(indice)) + r.nextGaussian());
+			this.addOrder(this.acf * (marche.getF() - marche.getPrice_sI(indice)) + r.nextGaussian()*marche.getSigma_f());
 		} else {
 			this.addOrder(0.0);
 		}
 	}
+
+
 
 }

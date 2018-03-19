@@ -9,10 +9,19 @@ import java.util.ArrayList;
  */
 public class Environment{
 	private ArrayList<Double> price_s;
+	private ArrayList<Double> order_c;
+	private ArrayList<Double> order_f;
+	private ArrayList<Double> a_c;
+	private ArrayList<Double> a_f;
+
+
+
 
 	private double am;
 	private double tax;
 	private double F;
+	private double sigma_c;
+	private double sigma_f;
 	private ArrayList<Integer> nb_agent_f;
 	private ArrayList<Integer> nb_agent_c;
 
@@ -23,15 +32,20 @@ public class Environment{
 		this.am = 1;
 		this.tax = 0.0;
 		this.F = 0;
+		this.sigma_c = 0.05;
+		this.sigma_f = 0.01;
 		this.nb_agent_c = new ArrayList<Integer>();
 		this.nb_agent_f = new ArrayList<Integer>();
 	}
 
-	public Environment(ArrayList<Double> price_s, double am, double tax, double f) {
+
+	public Environment(ArrayList<Double> price_s, double am, double tax, double f, double sigma_c, double sigma_f) {
 		this.price_s = price_s;
 		this.am = am;
 		this.tax = tax;
 		this.F = f;
+		this.sigma_c = sigma_c;
+		this.sigma_f = sigma_f;
 		this.nb_agent_c = new ArrayList<Integer>();
 		this.nb_agent_f = new ArrayList<Integer>();
 	}
@@ -113,8 +127,53 @@ public class Environment{
 		this.nb_agent_c = nb_agent_c;
 	}
 
-	public void setNb_agent_c(int indice, int valeur) {
-		this.nb_agent_c.set(indice, valeur);
+
+	public ArrayList<Double> getOrder_c() {
+		return order_c;
+	}
+
+	public void setOrder_c(ArrayList<Double> order_c) {
+		this.order_c = order_c;
+	}
+
+	public ArrayList<Double> getOrder_f() {
+		return order_f;
+	}
+
+	public void setOrder_f(ArrayList<Double> order_f) {
+		this.order_f = order_f;
+	}
+
+	public ArrayList<Double> getA_c() {
+		return a_c;
+	}
+
+	public void setA_c(ArrayList<Double> a_c) {
+		this.a_c = a_c;
+	}
+
+	public ArrayList<Double> getA_f() {
+		return a_f;
+	}
+
+	public void setA_f(ArrayList<Double> a_f) {
+		this.a_f = a_f;
+	}
+
+	public double getSigma_c() {
+		return sigma_c;
+	}
+
+	public void setSigma_c(double sigma_c) {
+		this.sigma_c = sigma_c;
+	}
+
+	public double getSigma_f() {
+		return sigma_f;
+	}
+
+	public void setSigma_f(double sigma_f) {
+		this.sigma_f = sigma_f;
 	}
 
 	public void addNb_agent_c(int valeur) {

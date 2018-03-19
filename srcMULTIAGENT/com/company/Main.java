@@ -11,9 +11,9 @@ import java.util.ArrayList;
 
 
 public class Main extends Application{
-	public static final int nb_marche = 2;
+	public static final int nb_marche =2 ;
 	public static final int nb_agent = 10;
-	public static final int nb_cycle = 1000;
+	public static final int nb_cycle = 100;
 	Stage[] page = new Stage[nb_marche+1];
 	static XYChart.Series[] serie = new XYChart.Series[nb_marche];
 	static XYChart.Series[] serieWeight = new XYChart.Series[2*nb_marche];
@@ -45,15 +45,13 @@ public class Main extends Application{
 			marche[i].getFirstweight(agent, nb_agent, i);
 		}
 
-
-
 		// Iteration
 		for (i = 2; i < nb_cycle; i++) {
 			for (j = 0; j < nb_marche; j++) {
 				marche[j].update(agent, j, nb_agent, i);
 			}
 			for (j = 0; j < nb_agent; j++) {
-				agent[j].update(marche[agent[j].getMarche()-1], i, model);
+				agent[j].update(marche,nb_marche, i, model);
 			}
 		}
 
@@ -62,7 +60,7 @@ public class Main extends Application{
 		for(i=0; i<nb_marche; i++){
 			serie[i] = new XYChart.Series();
 			serieWeight[i] = new XYChart.Series();
-			serieWeight[nb_marche+i] = new XYChart.Series();
+			serieWeight[i+nb_marche] = new XYChart.Series();
 		}
 
 
@@ -74,26 +72,7 @@ public class Main extends Application{
 			}
 		}
 
-		//Affichage graphes
 
-
-		/*
-		Stage stage = new Stage();
-		NumberAxis xAxis = new NumberAxis();
-		NumberAxis yAxis = new NumberAxis();
-		LineChart<Number, Number> lineChart = new LineChart<Number, Number>(xAxis, yAxis);
-		lineChart.setTitle("cc");
-		XYChart.Series serie = new XYChart.Series();
-		for (i = 0; i < nb_cycle; i++) {
-			serie.getData().add(new XYChart.Data(i,marche[0].getPrice_sI(i)));
-		}
-		serie.setName("cc");
-		Scene sceneS1 = new Scene(lineChart, 800, 600);
-		lineChart.getData().add(serie);
-		lineChart.setCreateSymbols(false);
-		stage.setScene(sceneS1);
-		stage.show();
-		*/
 		launch(args);
 
 	}
