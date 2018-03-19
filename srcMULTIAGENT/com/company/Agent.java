@@ -191,11 +191,11 @@ public class Agent {
 		}
 		if(i<nb_marche){
 			this.setType("technical");
+			this.setMarche(i+1);
 		}else{
 			this.setType("fundamental");
+			this.setMarche(i-nb_marche+1);
 		}
-
-		this.setMarche((int)(i/2)+1);
 	}
 
 	public void update(Environment[] marche, int nb_marche,  int indice, String model) {

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class Main extends Application{
 	public static final int nb_marche =2 ;
-	public static final int nb_agent = 10;
+	public static final int nb_agent = 100;
 	public static final int nb_cycle = 100;
 	Stage[] page = new Stage[nb_marche+1];
 	static XYChart.Series[] serie = new XYChart.Series[nb_marche];
@@ -24,7 +24,7 @@ public class Main extends Application{
 	public static void main(String[] args) {
 
 		//Choix des caractéristiques du modele
-		final String model  = "model1";
+		final String model  = "model2";
 
 		int i;
 		int j;
