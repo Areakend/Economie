@@ -38,6 +38,7 @@ public class Main extends Application {
 	public static void main(String args[]) {
 		List<MatT> listeMoyenne = new LinkedList<MatT>();
 		List<Double> stylizedFacts = new LinkedList<Double>();
+		List<Double> stylizedFacts2 = new LinkedList<Double>();
 		List<LinkedList<MatT>> listeMatrice = new LinkedList<LinkedList<MatT>>();
 
 		Random rand = new Random();
@@ -158,6 +159,7 @@ public class Main extends Application {
 					"Génération de l'affichage " + Integer.toString(i + 2) + " sur " + Integer.toString(iteration));
 			seriesS1.getData().add(new XYChart.Data(i, listeMoyenne.get(i).getS1()));
 			stylizedFacts.add(listeMoyenne.get(i).getS1());
+			stylizedFacts2.add(listeMoyenne.get(i).getS1());
 			seriesS2.getData().add(new XYChart.Data(i, listeMoyenne.get(i).getS2()));
 			seriesC1.getData().add(new XYChart.Data(i, listeMoyenne.get(i).getWC1()));
 			seriesF1.getData().add(new XYChart.Data(i, listeMoyenne.get(i).getWF1() + listeMoyenne.get(i).getWC1()));
@@ -165,10 +167,20 @@ public class Main extends Application {
 			seriesF2.getData()
 					.add(new XYChart.Data(i, 1 - listeMoyenne.get(i).getWF2() - listeMoyenne.get(i).getWC2()));
 		}
-		System.out.println(StylizedFacts.minimum(stylizedFacts));
-		System.out.println(StylizedFacts.maximum(stylizedFacts));
-		System.out.println(StylizedFacts.kurtosis(stylizedFacts));
-		System.out.println(StylizedFacts.autocorrelation(stylizedFacts,100));
+		
+		System.out.println("Marché 1 :");
+		System.out.println("Minimum : " + StylizedFacts.minimum(stylizedFacts));
+		System.out.println("Maximum : " + StylizedFacts.maximum(stylizedFacts));
+		System.out.println("Volatilité : " + StylizedFacts.volatility(stylizedFacts));
+		System.out.println("Kurtosis : " + StylizedFacts.kurtosis(stylizedFacts));
+		System.out.println("Autocorrelation : " + StylizedFacts.autocorrelation(stylizedFacts,1));
+		
+		System.out.println("Marché 2 :");
+		System.out.println("Minimum : " + StylizedFacts.minimum(stylizedFacts2));
+		System.out.println("Maximum : " + StylizedFacts.maximum(stylizedFacts2));
+		System.out.println("Volatilité : " + StylizedFacts.volatility(stylizedFacts2));
+		System.out.println("Kurtosis : " + StylizedFacts.kurtosis(stylizedFacts2));
+		System.out.println("Autocorrelation : " + StylizedFacts.autocorrelation(stylizedFacts2,1));
 		launch(args);
 
 	}

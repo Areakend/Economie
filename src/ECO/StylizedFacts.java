@@ -7,35 +7,35 @@ public class StylizedFacts {
 
 	public static Double minimum(List<Double> stylizedFacts) {
 		Double test = 0.0;
-		for (int i = 0; i < 4999; i++) {
-			if (test > stylizedFacts.get(i)) {
-				test = stylizedFacts.get(i);
+		for (int i = 1; i < 4999; i++) {
+			if (test > stylizedFacts.get(i) - stylizedFacts.get(i-1)) {
+				test = stylizedFacts.get(i) - stylizedFacts.get(i-1);
 			}
 		}
-		return test;
+		return test*100;
 	}
 
 	public static Double maximum(List<Double> stylizedFacts) {
 		Double test = 0.0;
-		for (int i = 0; i < 4999; i++) {
-			if (test < stylizedFacts.get(i)) {
-				test = stylizedFacts.get(i);
+		for (int i = 1; i < 4999; i++) {
+			if (test < stylizedFacts.get(i) - stylizedFacts.get(i-1)) {
+				test = stylizedFacts.get(i) - stylizedFacts.get(i-1);
 			}
 		}
-		return test;
+		return test*100;
 	}
 
-	public Double volatility(LinkedList<Double> prix) {
+	public static Double volatility(List<Double> stylizedFacts) {
 		Double test = 0.0;
 		List<Double> vola = new LinkedList<Double>();
 		for (int i = 1; i < 4999; i++) {
-			vola.add((prix.get(i) / prix.get(i - 1) - 1) * 100);
+			vola.add((stylizedFacts.get(i) / stylizedFacts.get(i - 1) - 1) * 100);
 		}
-		for (int i = 0; i < 4999; i++) {
+		for (int i = 0; i < 4997; i++) {
 			test = test + vola.get(i);
 		}
 		test = test / 5000;
-		// test = Math.sqrt(5000)*test;
+		test = Math.sqrt(5000)*test;
 		return test;
 	}
 
@@ -79,6 +79,7 @@ public class StylizedFacts {
 		for (int i = 0; i < 4999 - k; i++) {
 			esperance = esperance + (stylizedFacts.get(i) - moyenne) * (stylizedFacts.get(i + k) - moyenne);
 		}
+		esperance = esperance / (4999-k);
 		autocorrelation = esperance / ecartType*ecartType;
 
 		return autocorrelation;
