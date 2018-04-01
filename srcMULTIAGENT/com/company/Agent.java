@@ -163,14 +163,16 @@ public class Agent {
 		ArrayList<Double> fit = new ArrayList<Double>();
 		for(int i=0; i<nb_marche; i++){
 			fit.add((Math.exp(marche[i].getPrice_sI(indice))-Math.exp(marche[i].getPrice_sI(indice-1)))*this.getOrderI(indice-2)
-					- marche[i].getTax()*Math.exp(marche[i].getPrice_sI(indice))
-					+Math.exp(marche[i].getPrice_sI(indice-1))*Math.abs(this.getOrderI(indice-2))
+					- marche[i].getTax()*(Math.exp(marche[i].getPrice_sI(indice))
+					+Math.exp(marche[i].getPrice_sI(indice-1)))*Math.abs(this.getOrderI(indice-2))
 					+this.memory_b*this.getFitessTI(indice-1, i));
+			System.out.println("coucou");
+			System.out.println(Math.exp(marche[i].getPrice_sI(indice)));
 		}
 		for(int i=0; i<nb_marche; i++){
 			fit.add((Math.exp(marche[i].getPrice_sI(indice))-Math.exp(marche[i].getPrice_sI(indice-1)))*this.getOrderI(indice-2)
-					- marche[i].getTax()*Math.exp(marche[i].getPrice_sI(indice))
-					+Math.exp(marche[i].getPrice_sI(indice-1))*Math.abs(this.getOrderI(indice-2))
+					- marche[i].getTax()*(Math.exp(marche[i].getPrice_sI(indice))
+					+Math.exp(marche[i].getPrice_sI(indice-1)))*Math.abs(this.getOrderI(indice-2))
 					+this.memory_b*this.getFitessTI(indice-1, i+nb_marche));
 		}
 		this.fitness.add(fit);
@@ -182,13 +184,16 @@ public class Agent {
 		for(i=0; i<2*nb_marche; i++){
 			somme = somme + Math.exp(this.rationality_c * this.getFitessTI(indice, i));
 		}
+//		System.out.println("Fitness vaut " + this.getFitessTI(indice, 0));
 		Double r = Math.random();
 		i=0;
-		Double test = Math.exp(this.rationality_c*this.getFitessTI(indice,i)) /somme;
+		Double test = Math.exp(this.rationality_c*this.getFitessTI(indice,i)) / somme;
+//		System.out.println("somme " + somme);
 		while(test<r&&i<2*nb_marche-1){
 			i = i+1;
-			test = test+Math.exp(this.rationality_c*this.getFitessTI(indice,i)) /somme;
+			test = test+Math.exp(this.rationality_c*this.getFitessTI(indice,i)) / somme;
 		}
+//		System.out.println("Test vaut " + test);
 		if(i<nb_marche){
 			this.setType("technical");
 			this.setMarche(i+1);
