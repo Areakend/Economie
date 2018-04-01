@@ -174,7 +174,8 @@ public class Main extends Application {
 		System.out.println("Volatilité : " + StylizedFacts.volatility(stylizedFacts));
 		System.out.println("Kurtosis : " + StylizedFacts.kurtosis(stylizedFacts));
 		System.out.println("Autocorrelation : " + StylizedFacts.autocorrelation(stylizedFacts,1));
-		
+
+
 		System.out.println("Marché 2 :");
 		System.out.println("Minimum : " + StylizedFacts.minimum(stylizedFacts2));
 		System.out.println("Maximum : " + StylizedFacts.maximum(stylizedFacts2));

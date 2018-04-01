@@ -48,11 +48,31 @@ public class StylizedFacts {
 		return res;
 	}
 	
+	public static Double moyenneABS(List<Double> stylizedFacts) {
+		Double res = 0.0;
+		for (int i = 0; i < 4999; i++) {
+			res = res + Math.abs(stylizedFacts.get(i));
+		}
+		res = res / 5000;
+		return res;
+	}
+	
 	public static Double ecartType(List<Double> stylizedFacts) {
 		Double res = 0.0;
 		Double esperance = moyenne(stylizedFacts);
 		for (int i = 0; i < 4999; i++) {
 			res = res + Math.pow(stylizedFacts.get(i) - esperance, 2);
+		}
+		res = res / 5000;
+		res = Math.sqrt(res);
+		return res;
+	}
+	
+	public static Double ecartTypeABS(List<Double> stylizedFacts) {
+		Double res = 0.0;
+		Double esperance = moyenneABS(stylizedFacts);
+		for (int i = 0; i < 4999; i++) {
+			res = res + Math.pow(Math.abs(stylizedFacts.get(i)) - esperance, 2);
 		}
 		res = res / 5000;
 		res = Math.sqrt(res);
@@ -78,6 +98,20 @@ public class StylizedFacts {
 		Double moyenne = moyenne(stylizedFacts);
 		for (int i = 0; i < 4999 - k; i++) {
 			esperance = esperance + (stylizedFacts.get(i) - moyenne) * (stylizedFacts.get(i + k) - moyenne);
+		}
+		esperance = esperance / (4999-k);
+		autocorrelation = esperance / ecartType*ecartType;
+
+		return autocorrelation;
+	}
+	
+	public static Double autocorrelationABS(List<Double> stylizedFacts, int k) {
+		Double autocorrelation = 0.0;
+		Double esperance = 0.0;
+		Double ecartType = ecartTypeABS(stylizedFacts);
+		Double moyenne = moyenneABS(stylizedFacts);
+		for (int i = 0; i < 4999 - k; i++) {
+			esperance = esperance + Math.abs(Math.abs(stylizedFacts.get(i)) - moyenne) * Math.abs((Math.abs(stylizedFacts.get(i + k)) - moyenne));
 		}
 		esperance = esperance / (4999-k);
 		autocorrelation = esperance / ecartType*ecartType;
