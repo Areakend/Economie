@@ -1,42 +1,48 @@
 package ECO;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 public class MatT {
 	
-	private Double S1;
-	private Double S2;
-	private Double DC1;
-	private Double DC2;
-	private Double DF1;
-	private Double DF2;
-	private Double AC1;
-	private Double AF1;
-	private Double AC2;
-	private Double AF2;
-	private Double WC1;
-	private Double WF1;
-	private Double WC2;
-	private Double WF2;
+	private List<Double> S;
+	private List<Double> DC;
+	private List<Double> DF;
+	private List<Double> AC;
+	private List<Double> AF;
+	private List<Double> WC;
+	private List<Double> WF;
+
 	
-	public MatT(Double S1, Double S2, Double DC1, Double DC2, Double DF1, Double DF2, Double AC1, Double AF1, Double AC2, Double AF2, Double WC1, Double WF1, Double WC2, Double WF2) {
-		this.S1 = S1;
-		this.S2 = S2;
-		this.DC1 = DC1;
-		this.DC2 = DC2;
-		this.DF1 = DF1;
-		this.DF2 = DF2;
-		this.AC1 = AC1;
-		this.AF1 = AF1;
-		this.AC2 = AC2;
-		this.AF2 = AF2;
-		
+	public MatT(List<Double> S, List<Double> DC, List<Double> DF, List<Double> AC, List<Double>AF, List<Double> WC, List<Double> WF) {
+		this.S = S;
+		this.DC = DC;
+		this.DF = DF;
+		this.AC = AC;
+		this.AF = AF;		
 	}
 	
 	//matrice_1 est la matrice à T-2, matrice est la matrice à t - 1
 	public static MatT incrementation(MatT matrice, MatT matrice_1, param parametre) {
 		Random r = new Random();
-		MatT matriceT = new MatT (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);;
+		List<Double> iniS = new LinkedList<Double>();
+		List<Double> iniDC = new LinkedList<Double>();
+		List<Double> iniDF = new LinkedList<Double>();
+		List<Double> iniAC = new LinkedList<Double>();
+		List<Double> iniAF = new LinkedList<Double>();
+		List<Double> iniWC = new LinkedList<Double>();
+		List<Double> iniWF = new LinkedList<Double>();
+		for (int i = 0; i < Main.nb_marche; i++) {
+			iniS.add(0.0);
+			iniDC.add(0.0);
+			iniDF.add(0.0);
+			iniAC.add(0.0);
+			iniAF.add(0.0);
+			iniWC.add(0.0);
+			iniWF.add(0.0);
+		}
+		MatT matriceT = new MatT (iniS, iniDC, iniDF, iniAC, iniAF, iniWC, iniWF);;
 		// Ici on calule la matrice à l'instant T
 		matriceT.setS1(matrice.getS1() + parametre.getAm()*(matrice.getWC1()*matrice.getDC1() + matrice.getWF1()*matrice.getDF1())
 				+ r.nextGaussian()*parametre.getSigmam1());
@@ -78,118 +84,68 @@ public class MatT {
 		return(matriceT);
 		
 	}
+
+	public List<Double> getS() {
+		return S;
+	}
+
+	public void setS(List<Double> s) {
+		S = s;
+	}
+
+	public List<Double> getDC() {
+		return DC;
+	}
+
+	public void setDC(List<Double> dC) {
+		DC = dC;
+	}
 	
-	public Double getS1() {
-		return S1;
+	public void setDCi(int i, Double val) {
+		DC.set(i, val);
 	}
 
-	public void setS1(Double s1) {
-		S1 = s1;
+	public List<Double> getDF() {
+		return DF;
 	}
 
-	public Double getS2() {
-		return S2;
+	public void setDF(List<Double> dF) {
+		DF = dF;
 	}
 
-	public void setS2(Double s2) {
-		S2 = s2;
+	public List<Double> getAC() {
+		return AC;
 	}
 
-	public Double getDC1() {
-		return DC1;
+	public void setAC(List<Double> aC) {
+		AC = aC;
 	}
 
-	public void setDC1(Double dC1) {
-		DC1 = dC1;
+	public List<Double> getAF() {
+		return AF;
 	}
 
-	public Double getDC2() {
-		return DC2;
+	public void setAF(List<Double> aF) {
+		AF = aF;
 	}
 
-	public void setDC2(Double dC2) {
-		DC2 = dC2;
+	public List<Double> getWC() {
+		return WC;
 	}
 
-	public Double getDF1() {
-		return DF1;
+	public void setWC(List<Double> wC) {
+		WC = wC;
 	}
 
-	public void setDF1(Double dF1) {
-		DF1 = dF1;
+	public List<Double> getWF() {
+		return WF;
 	}
 
-	public Double getDF2() {
-		return DF2;
+	public void setWF(List<Double> wF) {
+		WF = wF;
 	}
 
-	public void setDF2(Double dF2) {
-		DF2 = dF2;
-	}
-
-	public Double getAC1() {
-		return AC1;
-	}
-
-	public void setAC1(Double aC1) {
-		AC1 = aC1;
-	}
-
-	public Double getAF1() {
-		return AF1;
-	}
-
-	public void setAF1(Double aF1) {
-		AF1 = aF1;
-	}
-
-	public Double getAC2() {
-		return AC2;
-	}
-
-	public void setAC2(Double aC2) {
-		AC2 = aC2;
-	}
-
-	public Double getAF2() {
-		return AF2;
-	}
-
-	public void setAF2(Double aF2) {
-		AF2 = aF2;
-	}
-
-	public Double getWC1() {
-		return WC1;
-	}
-
-	public void setWC1(Double wC1) {
-		WC1 = wC1;
-	}
-
-	public Double getWF1() {
-		return WF1;
-	}
-
-	public void setWF1(Double wF1) {
-		WF1 = wF1;
-	}
-
-	public Double getWC2() {
-		return WC2;
-	}
-
-	public void setWC2(Double wC2) {
-		WC2 = wC2;
-	}
-
-	public Double getWF2() {
-		return WF2;
-	}
-
-	public void setWF2(Double wF2) {
-		WF2 = wF2;
-	}
+	
 
   /*  public String toString(){
         return "Coucou";

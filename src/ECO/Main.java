@@ -18,54 +18,62 @@ public class Main extends Application {
 	public static int iteration = 5000;
 	// Ne pas mettre la valeur de nb_simulation à 1 ou 0 ! nb_simulation>=2
 	public static int nb_simulation = 10;
-	static Stage stageS1 = new Stage();
-	static Stage stageS2 = new Stage();
-	static Stage stagePoids = new Stage();
+	public static int nb_marche = 4;
+	public static List<Stage> marches = new LinkedList<Stage>();
 	@SuppressWarnings("rawtypes")
-	static XYChart.Series seriesS1 = new XYChart.Series();
-	@SuppressWarnings("rawtypes")
-	static XYChart.Series seriesS2 = new XYChart.Series();
-	@SuppressWarnings("rawtypes")
-	static XYChart.Series seriesC1 = new XYChart.Series();
-	@SuppressWarnings("rawtypes")
-	static XYChart.Series seriesC2 = new XYChart.Series();
-	@SuppressWarnings("rawtypes")
-	static XYChart.Series seriesF1 = new XYChart.Series();
-	@SuppressWarnings("rawtypes")
-	static XYChart.Series seriesF2 = new XYChart.Series();
-
+	public static List<XYChart.Series>seriesS= new LinkedList<XYChart.Series>();
 	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static List<XYChart.Series>seriesC= new LinkedList<XYChart.Series>();
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static List<XYChart.Series>seriesF= new LinkedList<XYChart.Series>();
+
+	static Stage stagePoids = new Stage();
+
+
 	public static void main(String args[]) {
 		List<MatT> listeMoyenne = new LinkedList<MatT>();
 		List<Double> stylizedFacts = new LinkedList<Double>();
 		List<Double> stylizedFacts2 = new LinkedList<Double>();
+		List<Double> sigmaC = new LinkedList<Double>();
+		List<Double> sigmaF = new LinkedList<Double>();
+		List<Double> sigmaM = new LinkedList<Double>();
+		List<Double> taxes = new LinkedList<Double>();
+		List<Double> S = new LinkedList<Double>();
+		List<Double> F = new LinkedList<Double>();
+		List<Double> temp = new LinkedList<Double>();
+		Double temp2;
 		List<LinkedList<MatT>> listeMatrice = new LinkedList<LinkedList<MatT>>();
 
 		Random rand = new Random();
+		
 
-		param parametre = new param(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+		for (int i = 0; i<nb_marche; i++) {
+			marches.add(new Stage());
+			seriesS.add(new XYChart.Series<>());
+			seriesF.add(new XYChart.Series<>());
+			seriesC.add(new XYChart.Series<>());
+			sigmaC.add(0.05);
+			sigmaF.add(0.01);
+			sigmaM.add(0.01);
+			temp.add(0.0);
+			F.add(0.0);
+			S.add(0.0);
+			taxes.add(0.0);
+		}
+
+		param parametre = new param(0.0, 0.0, 0.0, 0.0, sigmaC, taxes, 0.0, sigmaF, sigmaM, F);
 		parametre.setAm(1.0);
 		parametre.setB(0.975);
 		parametre.setAc(0.05);
 		parametre.setAf(0.05);
-		parametre.setSigmac1(0.05);
-		parametre.setSigmac2(0.05);
-		parametre.setSigmaf1(0.01);
-		parametre.setSigmaf2(0.01);
-		parametre.setSigmam1(0.01);
-		parametre.setSigmam2(0.01);
-		parametre.setTaxe1(0.0);
-		parametre.setTaxe2(0.0);
 		parametre.setC(300);
 
-		MatT matrice0 = new MatT(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-		matrice0.setS1(0.0);
-		matrice0.setS2(0.0);
-		matrice0.setDC1(rand.nextGaussian() * parametre.getSigmac1()); // à
-																		// modifier
-																		// en
-																		// random
-																		// de
+		MatT matrice0 = new MatT(S, S, S, S, S, S, S);
+
+		for (int i = 0; i < nb_marche; i++) {
+			matrice0.setDCi(i,rand.nextGaussian() * parametre.getSigmaCi(i)); // à
+		}
+															// de
 																		// param.getSigmac1()
 		matrice0.setDC2(rand.nextGaussian() * parametre.getSigmac2()); // random
 																		// de
@@ -81,7 +89,7 @@ public class Main extends Application {
 		matrice0.setAC2(0.0);
 		matrice0.setAF2(0.0);
 
-		MatT matrice1 = new MatT(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+		MatT matrice1 = new MatT(S,S,S,S,S,S,S);
 		matrice1.setDC1(rand.nextGaussian() * parametre.getSigmac1()); // à
 																		// modifier
 																		// en
