@@ -70,6 +70,10 @@ public class param {
 		return sigmaC.get(i);
 	}
 	
+	public Double getSigmaFi(int i) {
+		return sigmaF.get(i);
+	}
+	
 	public void setSigmaC(List<Double> sigmaC) {
 		this.sigmaC = sigmaC;
 	}

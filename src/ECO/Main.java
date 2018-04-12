@@ -18,18 +18,20 @@ public class Main extends Application {
 	public static int iteration = 5000;
 	// Ne pas mettre la valeur de nb_simulation à 1 ou 0 ! nb_simulation>=2
 	public static int nb_simulation = 10;
-	public static int nb_marche = 4;
+	public static Double nb_marche = 4.0;
 	public static List<Stage> marches = new LinkedList<Stage>();
 	@SuppressWarnings("rawtypes")
-	public static List<XYChart.Series>seriesS= new LinkedList<XYChart.Series>();
+	public static List<XYChart.Series> seriesS = new LinkedList<XYChart.Series>();
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static List<XYChart.Series>seriesC= new LinkedList<XYChart.Series>();
+	public static List<XYChart.Series> seriesC = new LinkedList<XYChart.Series>();
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static List<XYChart.Series>seriesF= new LinkedList<XYChart.Series>();
+	public static List<XYChart.Series> seriesF = new LinkedList<XYChart.Series>();
+
+	static List<Stage> stageS = new LinkedList<Stage>();
 
 	static Stage stagePoids = new Stage();
 
-
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void main(String args[]) {
 		List<MatT> listeMoyenne = new LinkedList<MatT>();
 		List<Double> stylizedFacts = new LinkedList<Double>();
@@ -45,9 +47,8 @@ public class Main extends Application {
 		List<LinkedList<MatT>> listeMatrice = new LinkedList<LinkedList<MatT>>();
 
 		Random rand = new Random();
-		
 
-		for (int i = 0; i<nb_marche; i++) {
+		for (int i = 0; i < nb_marche; i++) {
 			marches.add(new Stage());
 			seriesS.add(new XYChart.Series<>());
 			seriesF.add(new XYChart.Series<>());
@@ -71,48 +72,24 @@ public class Main extends Application {
 		MatT matrice0 = new MatT(S, S, S, S, S, S, S);
 
 		for (int i = 0; i < nb_marche; i++) {
-			matrice0.setDCi(i,rand.nextGaussian() * parametre.getSigmaCi(i)); // à
+			matrice0.setDCi(i, rand.nextGaussian() * parametre.getSigmaCi(i));
+			matrice0.setDFi(i, rand.nextGaussian() * parametre.getSigmaFi(i));
+			matrice0.setACi(i, 0.0);
+			matrice0.setAFi(i, 0.0);
+			matrice0.setWCi(i, 1 / (2 * nb_marche));
+			matrice0.setWFi(i, 1 / (2 * nb_marche));
 		}
-															// de
-																		// param.getSigmac1()
-		matrice0.setDC2(rand.nextGaussian() * parametre.getSigmac2()); // random
-																		// de
-																		// param.getSigmac2()
-		matrice0.setDF1(rand.nextGaussian() * parametre.getSigmaf1()); // random
-																		// de
-																		// param.getSigmaf1()
-		matrice0.setDF2(rand.nextGaussian() * parametre.getSigmaf1()); // random
-																		// de
-																		// param.getSigmaf2()
-		matrice0.setAC1(0.0);
-		matrice0.setAF1(0.0);
-		matrice0.setAC2(0.0);
-		matrice0.setAF2(0.0);
 
-		MatT matrice1 = new MatT(S,S,S,S,S,S,S);
-		matrice1.setDC1(rand.nextGaussian() * parametre.getSigmac1()); // à
-																		// modifier
-																		// en
-																		// random
-																		// de
-																		// param.getSigmac1()
-		matrice1.setDC2(rand.nextGaussian() * parametre.getSigmac2()); // random
-																		// de
-																		// param.getSigmac2()
-		matrice1.setDF1(rand.nextGaussian() * parametre.getSigmaf1()); // random
-																		// de
-																		// param.getSigmaf1()
-		matrice1.setDF2(rand.nextGaussian() * parametre.getSigmaf2()); // random
-																		// de
-																		// param.getSigmaf2()
-		matrice1.setAC1(0.0);
-		matrice1.setAF1(0.0);
-		matrice1.setAC2(0.0);
-		matrice1.setAF2(0.0);
-		matrice1.setWC1(0.2);
-		matrice1.setWF1(0.2);
-		matrice1.setWC2(0.2);
-		matrice1.setWF2(0.2);
+		MatT matrice1 = new MatT(S, S, S, S, S, S, S);
+
+		for (int i = 0; i < nb_marche; i++) {
+			matrice1.setDCi(i, rand.nextGaussian() * parametre.getSigmaCi(i));
+			matrice1.setDFi(i, rand.nextGaussian() * parametre.getSigmaFi(i));
+			matrice1.setACi(i, 0.0);
+			matrice1.setAFi(i, 0.0);
+			matrice1.setWCi(i, 1 / (2 * nb_marche));
+			matrice1.setWFi(i, 1 / (2 * nb_marche));
+		}
 
 		// On veut faire j tours pour supprimer l'erreur
 		System.out.println("Wait for it ...");
@@ -141,55 +118,58 @@ public class Main extends Application {
 			System.out
 					.println("Moyenne en cours, etape " + Integer.toString(i) + " sur " + Integer.toString(iteration));
 
-			MatT matriceMoyenne = new MatT(null, null, null, null, null, null, null, null, null, null, null, null, null,
-					null);
+			MatT matriceMoyenne = new MatT(null, null, null, null, null, null, null);
 
 			for (int j = 1; j < nb_simulation; j++) {
 
-				matriceMoyenne.setS1(
-						(listeMatrice.get(j - 1).get(i).getS1() * j + listeMatrice.get(j).get(i).getS1()) / (j + 1));
-				matriceMoyenne.setS2(
-						(listeMatrice.get(j - 1).get(i).getS2() * j + listeMatrice.get(j).get(i).getS2()) / (j + 1));
-				matriceMoyenne.setWC1(
-						(listeMatrice.get(j - 1).get(i).getWC1() * j + listeMatrice.get(j).get(i).getWC1()) / (j + 1));
-				matriceMoyenne.setWC2(
-						(listeMatrice.get(j - 1).get(i).getWC2() * j + listeMatrice.get(j).get(i).getWC2()) / (j + 1));
-				matriceMoyenne.setWF1(
-						(listeMatrice.get(j - 1).get(i).getWF1() * j + listeMatrice.get(j).get(i).getWF1()) / (j + 1));
-				matriceMoyenne.setWF2(
-						(listeMatrice.get(j - 1).get(i).getWF2() * j + listeMatrice.get(j).get(i).getWF2()) / (j + 1));
+				for (int k = 0; k < nb_marche; k++) {
+					matriceMoyenne.setSi(k, ((listeMatrice.get(j - 1).get(i).getS().get(k) * j
+							+ listeMatrice.get(j).get(i).getS().get(k)) / (j + 1)));
+
+					matriceMoyenne.setWCi(k, (listeMatrice.get(j - 1).get(i).getWC().get(k) * j
+							+ listeMatrice.get(j).get(i).getWC().get(k)) / (j + 1));
+
+					matriceMoyenne.setWFi(k, (listeMatrice.get(j - 1).get(i).getWF().get(k) * j
+							+ listeMatrice.get(j).get(i).getWF().get(k)) / (j + 1));
+				}
 			}
 			listeMoyenne.add(matriceMoyenne);
 		}
 
-		for (int i = 0; i <= iteration - 2; i++) {
+		for (int i1 = 0; i1 <= iteration - 2; i1++) {
 			System.out.println(
-					"Génération de l'affichage " + Integer.toString(i + 2) + " sur " + Integer.toString(iteration));
-			seriesS1.getData().add(new XYChart.Data(i, listeMoyenne.get(i).getS1()));
-			stylizedFacts.add(listeMoyenne.get(i).getS1());
-			stylizedFacts2.add(listeMoyenne.get(i).getS1());
-			seriesS2.getData().add(new XYChart.Data(i, listeMoyenne.get(i).getS2()));
-			seriesC1.getData().add(new XYChart.Data(i, listeMoyenne.get(i).getWC1()));
-			seriesF1.getData().add(new XYChart.Data(i, listeMoyenne.get(i).getWF1() + listeMoyenne.get(i).getWC1()));
-			seriesC2.getData().add(new XYChart.Data(i, 1 - listeMoyenne.get(i).getWC2()));
-			seriesF2.getData()
-					.add(new XYChart.Data(i, 1 - listeMoyenne.get(i).getWF2() - listeMoyenne.get(i).getWC2()));
+					"Génération de l'affichage " + Integer.toString(i1 + 2) + " sur " + Integer.toString(iteration));
+			for (int k = 0; k < nb_marche; k++) {
+				seriesS.get(k).getData().add(new XYChart.Data(i1, listeMoyenne.get(i1).getS().get(k)));
+				// stylizedFacts.add(listeMoyenne.get(i1).getS().get(k));
+				// stylizedFacts2.add(listeMoyenne.get(i1).getS().get(k));
+				seriesC.get(k).getData().add(new XYChart.Data(i1, listeMoyenne.get(i1).getWC().get(k)));
+				seriesF.get(k).getData().add(new XYChart.Data(i1, listeMoyenne.get(i1).getWF().get(k)));
+			}
 		}
-		
-		System.out.println("Marché 1 :");
-		System.out.println("Minimum : " + StylizedFacts.minimum(stylizedFacts));
-		System.out.println("Maximum : " + StylizedFacts.maximum(stylizedFacts));
-		System.out.println("Volatilité : " + StylizedFacts.volatility(stylizedFacts));
-		System.out.println("Kurtosis : " + StylizedFacts.kurtosis(stylizedFacts));
-		System.out.println("Autocorrelation : " + StylizedFacts.autocorrelation(stylizedFacts,1));
-
-
-		System.out.println("Marché 2 :");
-		System.out.println("Minimum : " + StylizedFacts.minimum(stylizedFacts2));
-		System.out.println("Maximum : " + StylizedFacts.maximum(stylizedFacts2));
-		System.out.println("Volatilité : " + StylizedFacts.volatility(stylizedFacts2));
-		System.out.println("Kurtosis : " + StylizedFacts.kurtosis(stylizedFacts2));
-		System.out.println("Autocorrelation : " + StylizedFacts.autocorrelation(stylizedFacts2,1));
+		/*
+		 * System.out.println("Marché 1 :"); System.out.println("Minimum : " +
+		 * StylizedFacts.minimum(stylizedFacts));
+		 * System.out.println("Maximum : " +
+		 * StylizedFacts.maximum(stylizedFacts));
+		 * System.out.println("Volatilité : " +
+		 * StylizedFacts.volatility(stylizedFacts));
+		 * System.out.println("Kurtosis : " +
+		 * StylizedFacts.kurtosis(stylizedFacts));
+		 * System.out.println("Autocorrelation : " +
+		 * StylizedFacts.autocorrelation(stylizedFacts, 1));
+		 * 
+		 * System.out.println("Marché 2 :"); System.out.println("Minimum : " +
+		 * StylizedFacts.minimum(stylizedFacts2));
+		 * System.out.println("Maximum : " +
+		 * StylizedFacts.maximum(stylizedFacts2));
+		 * System.out.println("Volatilité : " +
+		 * StylizedFacts.volatility(stylizedFacts2));
+		 * System.out.println("Kurtosis : " +
+		 * StylizedFacts.kurtosis(stylizedFacts2));
+		 * System.out.println("Autocorrelation : " +
+		 * StylizedFacts.autocorrelation(stylizedFacts2, 1));
+		 */
 		launch(args);
 
 	}
@@ -198,51 +178,52 @@ public class Main extends Application {
 	public void start(Stage stage) {
 		stage.setTitle("Line Chart Sample");
 		// defining the axes
-		final NumberAxis xAxisS1 = new NumberAxis();
-		final NumberAxis yAxisS1 = new NumberAxis();
-		final NumberAxis xAxisS2 = new NumberAxis();
-		final NumberAxis yAxisS2 = new NumberAxis();
+		final NumberAxis xAxisS = new NumberAxis();
+		final NumberAxis yAxisS = new NumberAxis();
 		final NumberAxis xAxisP = new NumberAxis();
 		final NumberAxis yAxisP = new NumberAxis();
 
 		// creating the chart
-		final LineChart<Number, Number> lineChartS1 = new LineChart<Number, Number>(xAxisS1, yAxisS1);
-		final LineChart<Number, Number> lineChartS2 = new LineChart<Number, Number>(xAxisS2, yAxisS2);
+		final List<LineChart<Number, Number>> lineChartS = new LinkedList<LineChart<Number, Number>>();
 		final AreaChart<Number, Number> areaChartPoids = new AreaChart<Number, Number>(xAxisP, yAxisP);
 		areaChartPoids.setTitle("Poids");
 
-		lineChartS1.setTitle("Prix du marché 1");
+		for (int i = 0; i < nb_marche; i++) {
+			lineChartS.set(i, new LineChart<Number, Number>(xAxisS, yAxisS));
+			lineChartS.get(i).setTitle("Prix du marché " + i);
+		}
 
-		lineChartS2.setTitle("Prix du marché 2");
-		// lineChartPoids.setTitle("Poids C1");
 		// defining a series
-		seriesS1.setName("S1");
-		seriesS2.setName("S2");
-		seriesC1.setName("C1");
-		seriesF1.setName("F1");
-		seriesC2.setName("C2");
-		seriesF2.setName("F2");
+		for (int i = 0; i < nb_marche; i++) {
+			seriesS.get(i).setName("S" + i);
+			seriesC.get(i).setName("C" + i);
+			seriesF.get(i).setName("F" + i);
+
+		}
 
 		// populating the series with data
 
-		Scene sceneS1 = new Scene(lineChartS1, 800, 600);
-		Scene sceneS2 = new Scene(lineChartS2, 800, 600);
+		List<Scene> scenes = new LinkedList<Scene>();
+		for (int i = 0; i < nb_marche; i++) {
+			scenes.set(i, new Scene(lineChartS.get(i), 800, 600));
+			stageS.set(i, new Stage());
+		}
 		Scene scenePoids = new Scene(areaChartPoids, 800, 600);
 
-		lineChartS1.getData().add(seriesS1);
-		lineChartS1.setCreateSymbols(false);
-		lineChartS2.getData().add(seriesS2);
-		lineChartS2.setCreateSymbols(false);
-		areaChartPoids.getData().addAll(seriesC1, seriesC2, seriesF1, seriesF2);
-		areaChartPoids.setCreateSymbols(false);
-		
-		stageS1.setScene(sceneS1);
-		stageS2.setScene(sceneS2);
-		stagePoids.setScene(scenePoids);
-		stageS1.show();
-		stageS2.show();
-		stagePoids.show();
-		
+		for (int i = 0; i < nb_marche; i++) {
+			lineChartS.get(i).getData().add(seriesS.get(i));
+			lineChartS.get(i).setCreateSymbols(false);
+
+			areaChartPoids.getData().addAll(seriesC.get(i), seriesF.get(i));
+			areaChartPoids.setCreateSymbols(false);
+
+			stageS.get(i).setScene(scenes.get(i));
+			stagePoids.setScene(scenePoids);
+			stagePoids.show();
+			stagePoids.setScene(scenePoids);
+			stageS.get(i).show();
+			stagePoids.show();
+		}
 	}
 
 }

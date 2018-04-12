@@ -93,6 +93,10 @@ public class MatT {
 		S = s;
 	}
 
+	public void setSi(int i, Double val) {
+		S.set(i, val);
+	}
+	
 	public List<Double> getDC() {
 		return DC;
 	}
@@ -103,6 +107,10 @@ public class MatT {
 	
 	public void setDCi(int i, Double val) {
 		DC.set(i, val);
+	}
+	
+	public void setDFi(int i, Double val) {
+		DF.set(i, val);
 	}
 
 	public List<Double> getDF() {
@@ -120,9 +128,17 @@ public class MatT {
 	public void setAC(List<Double> aC) {
 		AC = aC;
 	}
+	
+	public void setACi(int i, Double val) {
+		AC.set(i, val);
+	}
 
 	public List<Double> getAF() {
 		return AF;
+	}
+	
+	public void setAFi(int i, Double val) {
+		AF.set(i, val);
 	}
 
 	public void setAF(List<Double> aF) {
@@ -131,6 +147,10 @@ public class MatT {
 
 	public List<Double> getWC() {
 		return WC;
+	}
+	
+	public void setWCi(int i, Double val) {
+		WC.set(i, val);
 	}
 
 	public void setWC(List<Double> wC) {
@@ -143,6 +163,10 @@ public class MatT {
 
 	public void setWF(List<Double> wF) {
 		WF = wF;
+	}
+	
+	public void setWFi(int i, Double val) {
+		WF.set(i, val);
 	}
 
 	
