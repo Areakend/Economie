@@ -11,9 +11,9 @@ import java.util.ArrayList;
 
 
 public class Main extends Application{
-	public static final int nb_marche =2 ;
-	public static final int nb_agent = 100;
-	public static final int nb_cycle = 100;
+	public static final int nb_marche =3 ;
+	public static final int nb_agent = 300;
+	public static final int nb_cycle = 1000;
 	Stage[] page = new Stage[nb_marche+1];
 	static XYChart.Series[] serie = new XYChart.Series[nb_marche];
 	static XYChart.Series[] serieWeight = new XYChart.Series[2*nb_marche];
@@ -24,7 +24,7 @@ public class Main extends Application{
 	public static void main(String[] args) {
 
 		//Choix des caractéristiques du modele
-		final String model  = "model2";
+		final String model  = "model3";
 
 		int i;
 		int j;
@@ -32,18 +32,26 @@ public class Main extends Application{
 
 		// Instanciation des agents
 		Agent[] agent = new Agent[nb_agent];
-		for (i = 0; i < nb_agent; i++) {
-			agent[i] = new Agent(nb_marche);
-			System.out.println("agent " +i+" de type : " + agent[i].getType() + " sur le marche " +agent[i].getMarche());
+		if (model.equals("model1")){
+			for (i = 0; i < nb_agent; i++) {
+				agent[i] = new Agent(nb_marche, "fundamental");
+				System.out.println("agent " + i + " de type : " + agent[i].getType() + " sur le marche " + agent[i].getMarche());
+			}
+		}else{
+			for (i = 0; i < nb_agent; i++) {
+				agent[i] = new Agent(nb_marche);
+				System.out.println("agent " + i + " de type : " + agent[i].getType() + " sur le marche " + agent[i].getMarche());
+			}
 		}
-
 
 		// Instanciation des marches
 		Environment[] marche = new Environment[nb_marche];
 		for (i = 0; i < nb_marche; i++) {
 			marche[i] = new Environment();
 			marche[i].getFirstweight(agent, nb_agent, i);
+			System.out.println("marche "+i+" possède "+marche[i].getNb_agent_cI(0)+" agents chartistes et "+marche[i].getNb_agent_fI(0)+" agents fondamentalistes");
 		}
+
 
 		// Iteration
 		for (i = 2; i < nb_cycle; i++) {
@@ -54,7 +62,9 @@ public class Main extends Application{
 				agent[j].update(marche,nb_marche, i, model);
 			}
 		}
-
+		for (i = 0; i < nb_marche; i++) {
+			System.out.println("marche "+i+" possède "+marche[i].getNb_agent_cI(nb_cycle-1)+" agents chartistes et "+marche[i].getNb_agent_fI(nb_cycle-1)+" agents fondamentalistes");
+		}
 		System.out.println("Calcul finis");
 
 		for(i=0; i<nb_marche; i++){

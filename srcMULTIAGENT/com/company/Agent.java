@@ -20,8 +20,13 @@ public class Agent {
 	private double acf;
 	private double memory_b;
 
-	public Agent(int nbMarche, String test){
-		this.type = "fundamental";
+	public Agent(int nbMarche, String type){
+		this.type = type;
+		if(type.equals("technical")){
+			this.acf = 0.05;
+		}else{
+			this.acf = 0.05;
+		}
 		int choix = (int)( Math.random()*nbMarche);
 		this.marche = choix + 1;
 		this.order = new ArrayList<Double>();
@@ -34,7 +39,6 @@ public class Agent {
 		}
 		this.fitness.add(fit);
 		this.rationality_c = 300.0;
-		this.acf = 0.05;
 		this.memory_b = 0.975;
 
 	}
@@ -43,8 +47,10 @@ public class Agent {
 		double valeur = Math.random() * 100;
 		if (valeur < 50) {
 			this.type = "technical";
+			this.acf = 0.05;
 		} else if (valeur < 101) {
 			this.type = "fundamental";
+			this.acf = 0.05;
 		}
 		int choix = (int)( Math.random()*nbMarche);
 		this.marche = choix + 1;
@@ -60,7 +66,6 @@ public class Agent {
 		this.fitness.add(fit);
 		this.fitness.add(fit);
 		this.rationality_c = 300.0;
-		this.acf = 0.05;
 		this.memory_b = 0.975;
 	}
 
@@ -166,8 +171,6 @@ public class Agent {
 					- marche[i].getTax()*(Math.exp(marche[i].getPrice_sI(indice))
 					+Math.exp(marche[i].getPrice_sI(indice-1)))*Math.abs(this.getOrderI(indice-2))
 					+this.memory_b*this.getFitessTI(indice-1, i));
-			System.out.println("coucou");
-			System.out.println(Math.exp(marche[i].getPrice_sI(indice)));
 		}
 		for(int i=0; i<nb_marche; i++){
 			fit.add((Math.exp(marche[i].getPrice_sI(indice))-Math.exp(marche[i].getPrice_sI(indice-1)))*this.getOrderI(indice-2)
@@ -209,13 +212,16 @@ public class Agent {
 			updateModel1(marche[this.getMarche()-1], indice);
 			break;
 		case "model2":
-			//changement d'etait avec les poids
+			updateModel1(marche[this.getMarche()-1], indice);
+			break;
+		case "model3":
+			//changement d'etat avec les poids
 			checkFitness(marche, nb_marche, indice);
 			checkWeight(nb_marche, indice);
 			updateModel1(marche[this.getMarche()-1], indice);
 			break;
-		case "model3":
-			//changement des b
+		case "model4":
+			//changement d'etat avec la memoire
 			checkFitness(marche, nb_marche, indice);
 			//checkB(nb_marche, indice);
 			updateModel1(marche[this.getMarche()-1], indice);
@@ -228,10 +234,10 @@ public class Agent {
 	public void updateModel1(Environment marche, int indice) {
 		Random r = new Random();
 		if (this.type == "technical") {
-			this.addOrder(this.acf * (marche.getPrice_sI(indice) - marche.getPrice_sI(indice - 1)) + r.nextGaussian()*marche.getSigma_c());
+			this.addOrder((this.acf * (marche.getPrice_sI(indice) - marche.getPrice_sI(indice - 1)) + r.nextGaussian()*marche.getSigma_c())/marche.getNb_agent_cI(indice-1));
 
 		} else if (this.type == "fundamental") {
-			this.addOrder(this.acf * (marche.getF() - marche.getPrice_sI(indice)) + r.nextGaussian()*marche.getSigma_f());
+			this.addOrder((this.acf * (marche.getF() - marche.getPrice_sI(indice)) + r.nextGaussian()*marche.getSigma_f())/marche.getNb_agent_fI(indice-1));
 		} else {
 			this.addOrder(0.0);
 		}
