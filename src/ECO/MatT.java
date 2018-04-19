@@ -55,13 +55,11 @@ public class MatT {
 									+ matrice.getWF().get(i) * matrice.getDF().get(i))
 							+ r.nextGaussian() * parametre.getSigmaM().get(i));
 			matriceT.setDCi(i,
-					matrice.getS().get(i)
-							+ parametre.getAm() * (matrice.getWC().get(i) * matrice.getDC().get(i)
-									+ matrice.getWF().get(i) * matrice.getDF().get(i))
-							+ r.nextGaussian() * parametre.getSigmaM().get(i));
+					parametre.getAc() * (matriceT.getS().get(i) - matrice.getS().get(i))
+					+ r.nextGaussian() * parametre.getSigmaF().get(i));
 
 			// On suppose que les Fondamentales sont constantes !
-			matriceT.setDFi(i, parametre.getAf() * (parametre.getF().get(i) - matriceT.getS().get(i))
+			matriceT.setDFi(i, parametre.getAf() * (parametre.getF().get(i) - matrice.getS().get(i))
 					+ r.nextGaussian() * parametre.getSigmaF().get(i));
 
 			matriceT.setAFi(
@@ -85,7 +83,6 @@ public class MatT {
 		}
 		// Ici on incrémente la matrice finale avec toutes les valeurs
 		return (matriceT);
-
 	}
 
 	public List<Double> getS() {

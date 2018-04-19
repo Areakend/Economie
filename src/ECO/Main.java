@@ -108,7 +108,6 @@ public class Main extends Application {
 			matrice0.setAFi(i, 0.0);
 		}
 		for (int i = 0; i < nb_marche; i++) {
-			System.out.println(i);
 			matrice0.setWCi(i, 1 / (2 * nb_marche));
 			matrice0.setWFi(i, 1 / (2 * nb_marche));
 		}

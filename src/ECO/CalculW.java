@@ -12,7 +12,7 @@ public class CalculW {
 			denominateur = Math.exp(parametre.getC() * matrice.getAC().get(i))
 					+ Math.exp(parametre.getC() * matrice.getAF().get(i));
 		}
-		denominateur = denominateur + + Math.exp(0.0);
+		denominateur = denominateur + Math.exp(0.0);
 		return denominateur;
 	}
 
