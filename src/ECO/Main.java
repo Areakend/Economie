@@ -16,7 +16,7 @@ import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-	public static int iteration = 5000;
+	public static int iteration = 500;
 	// Ne pas mettre la valeur de nb_simulation à 1 ou 0 ! nb_simulation>=2
 	public static int nb_simulation = 4;
 	public static Double nb_marche = 2.0;
@@ -148,24 +148,28 @@ public class Main extends Application {
 
 		}
 
+		MatT matriceMoyenne = new MatT(temp, temp, temp, temp, temp, temp, temp);
 		for (int i = 1; i <= iteration - 1; i++) {
+
+
 			System.out
 					.println("Moyenne en cours, etape " + Integer.toString(i) + " sur " + Integer.toString(iteration));
 
-			MatT matriceMoyenne = matrice0;
-
 			for (int j = 1; j < nb_simulation; j++) {
+
+				matriceMoyenne = listeMatrice.get(j).get(i);
+
 
 				for (int k = 0; k < nb_marche; k++) {
 					System.out.println("Etape " + Integer.toString(j) + " sur " + Integer.toString(nb_simulation));
 
-					matriceMoyenne.setSi(k, ((listeMatrice.get(j - 1).get(i).getS().get(k) * j
+					matriceMoyenne.setSi(k, ((matriceMoyenne.getS().get(k) * j
 							+ listeMatrice.get(j).get(i).getS().get(k)) / (j + 1)));
 
-					matriceMoyenne.setWCi(k, (listeMatrice.get(j - 1).get(i).getWC().get(k) * j
+					matriceMoyenne.setWCi(k, (matriceMoyenne.getWC().get(k) * j
 							+ listeMatrice.get(j).get(i).getWC().get(k)) / (j + 1));
 
-					matriceMoyenne.setWFi(k, (listeMatrice.get(j - 1).get(i).getWF().get(k) * j
+					matriceMoyenne.setWFi(k, (matriceMoyenne.getWF().get(k) * j
 							+ listeMatrice.get(j).get(i).getWF().get(k)) / (j + 1));
 				}
 			}
@@ -191,6 +195,8 @@ public class Main extends Application {
 				serieWeight[k].getData().add(new XYChart.Data(i1, listeMoyenne.get(i1).getWC().get(k))); //marche[k].getNb_agent_cI(i1)));
 				serieWeight[k + nb_marcheInt].getData().add(new XYChart.Data(i1, listeMoyenne.get(i1).getWF().get(k))); // marche[k].getNb_agent_fI(i1)));
 			}
+			System.out.println(listeMoyenne.get(i1).getWC().get(0) + listeMoyenne.get(i1).getWC().get(1) + 
+					listeMoyenne.get(i1).getWF().get(1) + listeMoyenne.get(i1).getWF().get(1));
 		}
 	
 	
