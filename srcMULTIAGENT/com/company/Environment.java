@@ -179,16 +179,19 @@ public class Environment{
 	public void addNb_agent_c(int valeur) {
 		this.nb_agent_c.add(valeur);
 	}
+
 	public void getFirstweight(Agent[] agent, int nb_agent, int marche){
 		int nb_agentf = 0;
 		int nb_agentc = 0;
 		for(int i=0; i< nb_agent; i++){
-			if(agent[i].getMarche()==marche+1){
-					if(agent[i].getType()=="fundamental"){
-						nb_agentf = nb_agentf +1;
-					}else{
-						nb_agentc = nb_agentc +1;
+			if(agent[i].getMarche()==marche+1) {
+				if (agent[i].getState().equals("actif")) {
+					if (agent[i].getType() == "fundamental") {
+						nb_agentf = nb_agentf + 1;
+					} else {
+						nb_agentc = nb_agentc + 1;
 					}
+				}
 			}
 		}
 		this.addNb_agent_c(nb_agentc);
@@ -204,11 +207,13 @@ public class Environment{
 		int nb_agentc = 0;
 		for (int i = 0; i < nb_agent; i++) {
 			if (agent[i].getMarche()-1 == numero_marche) {
-				somme = somme + agent[i].getOrderI(indice-1) * this.am;
-				if(agent[i].getType()=="fundamental"){
-					nb_agentf = nb_agentf +1;
-				}else{
-					nb_agentc = nb_agentc +1;
+				if(agent[i].getState().equals("actif")) {
+					somme = somme + agent[i].getOrderI(indice - 1) * this.am;
+					if (agent[i].getType() == "fundamental") {
+						nb_agentf = nb_agentf + 1;
+					} else {
+						nb_agentc = nb_agentc + 1;
+					}
 				}
 			}
 		}

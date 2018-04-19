@@ -11,9 +11,9 @@ import java.util.ArrayList;
 
 
 public class Main extends Application{
-	public static final int nb_marche =3 ;
-	public static final int nb_agent = 300;
-	public static final int nb_cycle = 1000;
+	public static final int nb_marche =2 ;
+	public static final int nb_agent = 100;
+	public static final int nb_cycle = 100;
 	Stage[] page = new Stage[nb_marche+1];
 	static XYChart.Series[] serie = new XYChart.Series[nb_marche];
 	static XYChart.Series[] serieWeight = new XYChart.Series[2*nb_marche];
@@ -24,7 +24,7 @@ public class Main extends Application{
 	public static void main(String[] args) {
 
 		//Choix des caractéristiques du modele
-		final String model  = "model3";
+		final String model  = "model4";
 
 		int i;
 		int j;
@@ -32,9 +32,15 @@ public class Main extends Application{
 
 		// Instanciation des agents
 		Agent[] agent = new Agent[nb_agent];
-		if (model.equals("model1")){
+		if (model.equals("model1")) {
 			for (i = 0; i < nb_agent; i++) {
 				agent[i] = new Agent(nb_marche, "fundamental");
+				System.out.println("agent " + i + " de type : " + agent[i].getType() + " sur le marche " + agent[i].getMarche());
+			}
+		}else if(model.equals("model4")){
+			double r = Math.random();
+			for (i = 0; i < nb_agent; i++) {
+				agent[i] = new Agent(nb_marche, r);
 				System.out.println("agent " + i + " de type : " + agent[i].getType() + " sur le marche " + agent[i].getMarche());
 			}
 		}else{
@@ -81,6 +87,14 @@ public class Main extends Application{
 				serieWeight[j+nb_marche].getData().add(new XYChart.Data(i, marche[j].getNb_agent_fI(i)));
 			}
 		}
+
+		//System.out.println(agent[5].getFitessTI(nb_cycle-1,0));
+		//System.out.println(agent[5].getFitessTI(nb_cycle-1,1));
+		//System.out.println(agent[5].getFitessTI(nb_cycle-1,2));
+		//System.out.println(agent[5].getFitessTI(nb_cycle-1,3));
+		//System.out.println(marche[0].getOrder_c().get(0));
+
+
 
 
 		launch(args);
