@@ -24,7 +24,7 @@ public class Main extends Application{
 	public static void main(String[] args) {
 
 		//Choix des caractéristiques du modele
-		final String model  = "model2";
+		final String model  = "model4";
 
 		int i;
 		int j;
@@ -32,18 +32,32 @@ public class Main extends Application{
 
 		// Instanciation des agents
 		Agent[] agent = new Agent[nb_agent];
-		for (i = 0; i < nb_agent; i++) {
-			agent[i] = new Agent(nb_marche);
-			System.out.println("agent " +i+" de type : " + agent[i].getType() + " sur le marche " +agent[i].getMarche());
+		if (model.equals("model1")) {
+			for (i = 0; i < nb_agent; i++) {
+				agent[i] = new Agent(nb_marche, "fundamental");
+				System.out.println("agent " + i + " de type : " + agent[i].getType() + " sur le marche " + agent[i].getMarche());
+			}
+		}else if(model.equals("model4")){
+			double r = Math.random();
+			for (i = 0; i < nb_agent; i++) {
+				agent[i] = new Agent(nb_marche, r);
+				System.out.println("agent " + i + " de type : " + agent[i].getType() + " sur le marche " + agent[i].getMarche());
+			}
+		}else{
+			for (i = 0; i < nb_agent; i++) {
+				agent[i] = new Agent(nb_marche);
+				System.out.println("agent " + i + " de type : " + agent[i].getType() + " sur le marche " + agent[i].getMarche());
+			}
 		}
-
 
 		// Instanciation des marches
 		Environment[] marche = new Environment[nb_marche];
 		for (i = 0; i < nb_marche; i++) {
 			marche[i] = new Environment();
 			marche[i].getFirstweight(agent, nb_agent, i);
+			System.out.println("marche "+i+" possède "+marche[i].getNb_agent_cI(0)+" agents chartistes et "+marche[i].getNb_agent_fI(0)+" agents fondamentalistes");
 		}
+
 
 		// Iteration
 		for (i = 2; i < nb_cycle; i++) {
@@ -54,7 +68,9 @@ public class Main extends Application{
 				agent[j].update(marche,nb_marche, i, model);
 			}
 		}
-
+		for (i = 0; i < nb_marche; i++) {
+			System.out.println("marche "+i+" possède "+marche[i].getNb_agent_cI(nb_cycle-1)+" agents chartistes et "+marche[i].getNb_agent_fI(nb_cycle-1)+" agents fondamentalistes");
+		}
 		System.out.println("Calcul finis");
 
 		for(i=0; i<nb_marche; i++){
@@ -71,6 +87,14 @@ public class Main extends Application{
 				serieWeight[j+nb_marche].getData().add(new XYChart.Data(i, marche[j].getNb_agent_fI(i)));
 			}
 		}
+
+		//System.out.println(agent[5].getFitessTI(nb_cycle-1,0));
+		//System.out.println(agent[5].getFitessTI(nb_cycle-1,1));
+		//System.out.println(agent[5].getFitessTI(nb_cycle-1,2));
+		//System.out.println(agent[5].getFitessTI(nb_cycle-1,3));
+		//System.out.println(marche[0].getOrder_c().get(0));
+
+
 
 
 		launch(args);
