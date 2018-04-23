@@ -28,15 +28,16 @@ public class StylizedFacts {
 	public static Double volatility(List<Double> stylizedFacts) {
 		Double test = 0.0;
 		List<Double> vola = new LinkedList<Double>();
-		for (int i = 1; i < 4999; i++) {
-			vola.add((stylizedFacts.get(i) / stylizedFacts.get(i - 1) - 1) * 100);
+/*		for (int i = 1; i < 4999; i++) {
+			vola.add( Math.pow((Math.log(stylizedFacts.get(i) / stylizedFacts.get(i - 1))), 2) );
 		}
 		for (int i = 0; i < 4997; i++) {
 			test = test + vola.get(i);
 		}
-		test = test / 5000;
-		test = Math.sqrt(5000)*test;
-		return test;
+		test = test * 252 / 5000;
+		test = Math.sqrt(test);
+		return test;*/
+		return ( ecartType(stylizedFacts));
 	}
 
 	public static Double moyenne(List<Double> stylizedFacts) {
