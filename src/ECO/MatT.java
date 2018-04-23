@@ -56,25 +56,24 @@ public class MatT {
 							+ r.nextGaussian() * parametre.getSigmaM().get(i));
 			matriceT.setDCi(i,
 					parametre.getAc() * (matriceT.getS().get(i) - matrice.getS().get(i))
-					+ r.nextGaussian() * parametre.getSigmaF().get(i));
+					+ r.nextGaussian() * parametre.getSigmaC().get(i));
 
 			// On suppose que les Fondamentales sont constantes !
 			matriceT.setDFi(i, parametre.getAf() * (parametre.getF().get(i) - matrice.getS().get(i))
 					+ r.nextGaussian() * parametre.getSigmaF().get(i));
-
 			matriceT.setAFi(
 					i, (Math.exp(matriceT.getS().get(i)) - Math.exp(matrice.getS().get(i))) * matrice_1.getDF().get(i)
 							- parametre.getTaxes().get(i)
 									* (Math.exp(matriceT.getS().get(i)) + Math.exp(matrice.getS().get(i)))
 									* Math.abs(matrice_1.getDF().get(i))
-							+ parametre.getB() * matrice.getAF().get(i));
+							+ parametre.getB() * matrice_1.getAF().get(i));
 
 			matriceT.setACi(
 					i, (Math.exp(matriceT.getS().get(i)) - Math.exp(matrice.getS().get(i))) * matrice_1.getDC().get(i)
 							- parametre.getTaxes().get(i)
 									* (Math.exp(matriceT.getS().get(i)) + Math.exp(matrice.getS().get(i)))
 									* Math.abs(matrice_1.getDC().get(i))
-							+ parametre.getB() * matrice.getAC().get(i));
+							+ parametre.getB() * matrice_1.getAC().get(i));
 
 		}
 		for (int i = 0; i < Main.nb_marche; i++) {

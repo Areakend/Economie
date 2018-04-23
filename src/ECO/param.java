@@ -16,6 +16,7 @@ public class param {
 	private double c;
 	private List<Double> F = new LinkedList<Double>();
 
+	// On crée une variable appelée param, qui contient les paramètres listés ci-dessus
 	public param(double am, double b, double ac, double af, List<Double> sigmaC, List<Double> taxes, double c,
 			List<Double> sigmaF, List<Double> sigmaM, List<Double> F) {
 		this.am = am;
@@ -29,6 +30,8 @@ public class param {
 		this.c = c;
 		this.F = F;
 	}
+
+	//La liste ci-dessous permet de récuperer les valeurs des variables ou de les mettres à jour dans d'autres classes
 
 	public double getAm() {
 		return am;
