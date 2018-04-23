@@ -49,11 +49,13 @@ public class MatT {
 		// Ici on calule la matrice à l'instant T
 
 		for (int i = 0; i < Main.nb_marche; i++) {
+			//Les paramètres S, prix des marchés
 			matriceT.setSi(i,
 					matrice.getS().get(i)
 							+ parametre.getAm() * (matrice.getWC().get(i) * matrice.getDC().get(i)
 									+ matrice.getWF().get(i) * matrice.getDF().get(i))
 							+ r.nextGaussian() * parametre.getSigmaM().get(i));
+			// Les paramètres D, ordres générés
 			matriceT.setDCi(i,
 					parametre.getAc() * (matriceT.getS().get(i) - matrice.getS().get(i))
 					+ r.nextGaussian() * parametre.getSigmaC().get(i));
@@ -61,6 +63,8 @@ public class MatT {
 			// On suppose que les Fondamentales sont constantes !
 			matriceT.setDFi(i, parametre.getAf() * (parametre.getF().get(i) - matrice.getS().get(i))
 					+ r.nextGaussian() * parametre.getSigmaF().get(i));
+			
+			//Les fitness
 			matriceT.setAFi(
 					i, (Math.exp(matriceT.getS().get(i)) - Math.exp(matrice.getS().get(i))) * matrice_1.getDF().get(i)
 							- parametre.getTaxes().get(i)
@@ -76,6 +80,8 @@ public class MatT {
 							+ parametre.getB() * matrice_1.getAC().get(i));
 
 		}
+		
+		// Puis on calcul les poids
 		for (int i = 0; i < Main.nb_marche; i++) {
 			matriceT.setWCi(i, CalculW.calWCi(i, matriceT, parametre));
 			matriceT.setWFi(i, CalculW.calWFi(i, matriceT, parametre));
@@ -84,6 +90,7 @@ public class MatT {
 		return (matriceT);
 	}
 
+	//La liste ci-dessous permet de récuperer les valeurs des variables ou de les mettres à jour dans d'autres classes
 	public List<Double> getS() {
 		return S;
 	}
